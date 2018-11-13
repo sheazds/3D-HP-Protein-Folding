@@ -1,3 +1,5 @@
+package worker;
+
 public class LinkList { 
 	private Node head;
 	

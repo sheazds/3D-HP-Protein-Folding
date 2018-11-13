@@ -5,19 +5,19 @@ public class _Overlap_Stability
 {
 	public static void main (String args[])
 	{
-		Node start = new Node('h', new Coords(0,0,0));
+		Node start = new Node('H', new Coords(0,0,0));
 		Node next = start;
 		
 		for(int i=1; i<3; i++)
 		{
-			next.setNext(new Node('h', new Coords(1,i,0)));
+			next.setNext(new Node('H', new Coords(0,i,0)));
 			next = next.getNext();
 		}
-		Node second = new Node('h', new Coords(1,10,0));
-		next = second;
-		for(int i=9; i>5; i--)
+		Node second = new Node('H', new Coords(1,10,0));
+		//next = second;
+		for(int i=2; i>=0; i--)
 		{
-			next.setNext(new Node('h', new Coords(1,i,0)));
+			next.setNext(new Node('H', new Coords(1,i,0)));
 			next = next.getNext();
 		}
 		next = start;
@@ -29,6 +29,7 @@ public class _Overlap_Stability
 		
 		System.out.println("Overlaps? " + overlaps(start));
 		System.out.println("willOverlap? " + willOverlap(start, second));
+		System.out.println("Energy:" + energy(start));
 		
 	}
 	
@@ -70,34 +71,52 @@ public class _Overlap_Stability
 		return false;
 	}
 	
-	public static int stability(Node start)
+	public static int energy(Node start)
 	{
-		int stability = 0;
+		int energy = 0;
 		// Matrix access order: X, Y, Z
-		ArrayList<ArrayList<ArrayList<Node>>> matrix = new ArrayList<ArrayList<ArrayList<Node>>>();
+		ArrayList<Coords> chargeLocs = new ArrayList<Coords>();
 		
 		Node next = start;
-		//add node to matrix
 		while (next != null)
 		{
-			//get position
-			int xLoc = next.getCoords().getX();
-			int yLoc = next.getCoords().getY();
-			int zLoc = next.getCoords().getZ();
-			
-			//expand matrix to fit coordinates
-			while (matrix.size() < xLoc)
-				matrix.add(new ArrayList<ArrayList<Node>>());
-			while (matrix.get(xLoc).size() < yLoc)
-				matrix.get(xLoc).add(new ArrayList<Node>());
-			while (matrix.get(xLoc).get(yLoc).size() < zLoc)
-				matrix.get(xLoc).get(yLoc).add(null);
-				
-			
-				
-			next = start.getNext();
+			//if node is H, add to list of charges
+			if (next.getCharge() == 'H')
+				chargeLocs.add(next.getCoords());
+			//if more than 1 charge check for neighbors in list of charges
+			if (chargeLocs.size() > 1)
+			{	//(-1,0,0)
+				Coords testCoords = new Coords(
+						next.getCoords().getX()-1,
+						next.getCoords().getY(),
+						next.getCoords().getZ());
+				if (chargeLocs.contains(testCoords))
+					energy--;
+				//(+1,0,0)
+				testCoords.setX(testCoords.getX()+2);
+				if (chargeLocs.contains(testCoords))
+					energy--;
+				//(0,-1,0)
+				testCoords.setX(testCoords.getX()-1);
+				testCoords.setY(testCoords.getY()-1);
+				if (chargeLocs.contains(testCoords))
+					energy--;
+				//(0,+1,0)
+				testCoords.setY(testCoords.getY()+2);
+				if (chargeLocs.contains(testCoords))
+					energy--;
+				//(0,0,-1)
+				testCoords.setY(testCoords.getY()-1);
+				testCoords.setZ(testCoords.getZ()-1);
+				if (chargeLocs.contains(testCoords))
+					energy--;
+				//(0,0,1)
+				testCoords.setZ(testCoords.getZ()-1);
+				if (chargeLocs.contains(testCoords))
+					energy--;
+			}			
+			next = next.getNext();
 		}
-		
-		return stability;
+		return energy;
 	}
 }
