@@ -1,4 +1,5 @@
 package worker;
+
 /**
  * 
  * Coords.java
@@ -8,7 +9,8 @@ package worker;
  * @author Aaron Germuth
  * @date 2013-03-16
  */
-public class Coords {
+@SuppressWarnings("rawtypes")
+public class Coords implements Comparable{
 	private int x; 
 	private int y;
 	private int z;
@@ -35,13 +37,21 @@ public class Coords {
 		System.out.println("z: " + this.z);
 	}
 	
-	public boolean equals(Coords another){
-		if(this.x == another.x 
-				&& this.y == another.y
-				&& this.z == another.z){
+	@Override
+	public boolean equals(Object another)	{
+		if (!(another instanceof Coords))
+			return false;
+		if(this.x == ((Coords) another).x 
+				&& this.y == ((Coords) another).y
+				&& this.z == ((Coords) another).z){
 			return true;
 		}
 		return false;
+	}
+	@Override
+	public int hashCode()
+	{
+		return x+y+z;
 	}
 	
 	/**
@@ -51,9 +61,10 @@ public class Coords {
 	 * @param another
 	 * @return not sure
 	 */
-	public boolean compare(Coords another){
+	@Override
+	public int compareTo(Object arg0) {
 		System.err.println("compare methods of compare method was called, it has not yet been implemented");
-		return true;
+		return -1;
 	}
 
 	public int getX() {
@@ -78,7 +89,5 @@ public class Coords {
 
 	public void setZ(int z) {
 		this.z = z;
-	}
-	
-	
+	}	
 }
