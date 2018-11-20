@@ -347,7 +347,22 @@ public class Dynamic_Fold
 				possibleFolds.remove(i);
 			else
 				i++;
-		
+		/*
+		int current = 0;
+		int next = 1; 
+		while(current < possibleFolds.size()-1)
+		{
+			ArrayList<Node> rotations = getRotations(possibleFolds.get(current));
+			while (next < possibleFolds.size())
+			{
+				if (rotations.contains(possibleFolds.get(next)))
+					//possibleFolds.remove(next);
+				else
+					next++;
+			}
+			current++;
+		}
+		*/
 		return possibleFolds;
 	}
 	

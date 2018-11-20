@@ -11,7 +11,9 @@ package worker;
  * @author Aaron Germuth
  * @date 2013-03-16
  */
-public class Node {
+@SuppressWarnings("rawtypes")
+public class Node implements Comparable
+{
 	private char charge;
 	private Node next; 
 	private Node previous;
@@ -85,5 +87,31 @@ public class Node {
 		if (next != null)
 			 clone.setNext(next.clone());
 		return clone;
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public boolean equals(Object another)
+	{
+		if (!(another instanceof Node))
+			return false;
+		if(coords.getX() == ((Node) another).getCoords().getX() 
+				&& coords.getY() == ((Node) another).coords.getY()
+				&& coords.getZ() == ((Node) another).coords.getZ())
+					return next.equals(((Node) another).getNext());
+		return false;
+	}
+	@Override
+	public int hashCode()
+	{
+		int hash = this.coords.getX()+this.coords.getY()+this.coords.getZ();
+		if (next != null)
+			hash = hash + next.hashCode();
+		return hash;
 	}
 }
