@@ -25,11 +25,13 @@ public class Dynamic_Fold
 			next = next.getNext();
 		}
 		
-		ArrayList<Node> folds = append(start, second);
+		generateCombinations(start, second);
 		
-		for (int i=0; i<folds.size(); i++)
+		System.out.println(validChains.size());
+		next = validChains.get(0);
+		for (int i=0; i<validChains.size(); i++)
 		{
-			next = folds.get(i);
+			next = validChains.get(i);
 			while (next !=null)
 			{
 				System.out.print("["+next.getCoords().getX()+","+next.getCoords().getY()+","+next.getCoords().getZ()+"],");
@@ -184,202 +186,178 @@ public class Dynamic_Fold
 		}
 		return myList;
 	}
+	
+	static ArrayList<Node> validChains = new ArrayList<Node>();
+    static int currentMaxEnergyLevel = Integer.MAX_VALUE;
+	
+	/**
+     * Generate the combinations by iterating over the rotations and then shifting the second chain to the end of the
+     * first chain. Rotations are calculated by applying two functions: roll and turn. Using them, the first 12
+     * rotations are generated using the sequence RTTTRTTTRTTT. Then a transformation of RTR is needed to reposition
+     * the chain. Then the second 12 are generated using the same sequence. For each of the 24 options, call the check
+     * function which will then do the shifting.
+     * @param frontChain - The chain at the beginning which we append to.
+     * @param behindChain - The chain at the end which is being appended.
+     */
+    public static void generateCombinations(Node frontChain, Node behindChain) {
+        for(int i=0; i<2; i++) {
+            for(int j=0; j<3; j++) {
+                roll(behindChain);
+                check(frontChain, behindChain);
+                for(int k=0; k<3; k++) {
+                    turn(behindChain);
+                    check(frontChain, behindChain);
+                }
+            }
+            roll(behindChain);
+            turn(behindChain);
+            roll(behindChain);
+        }
+    }
 
-	private static Node rotatePlus90XY(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getY()*-1,
-							curNode.getCoords().getX(),
-							curNode.getCoords().getZ()));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotatePlus90XY(curNode.getNext()));
-		
-		return rotated;
-	}
-	private static Node rotateMin90XY(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getY(),
-							curNode.getCoords().getX()*-1,
-							curNode.getCoords().getZ()));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotateMin90XY(curNode.getNext()));
-		
-		return rotated;
-	}
-	private static Node rotatePlus90XZ(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getZ()*-1,
-							curNode.getCoords().getY(),
-							curNode.getCoords().getX()));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotatePlus90XZ(curNode.getNext()));
-		
-		return rotated;
-	}
-	private static Node rotateMin90XZ(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getZ(),
-							curNode.getCoords().getY(),
-							curNode.getCoords().getX()*-1));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotateMin90XZ(curNode.getNext()));
-		
-		return rotated;
-	}
-	private static Node rotatePlus90YZ(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getX(),
-							curNode.getCoords().getZ()*-1,
-							curNode.getCoords().getY()));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotatePlus90YZ(curNode.getNext()));
-		
-		return rotated;
-	}
-	private static Node rotateMin90YZ(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getX(),
-							curNode.getCoords().getZ(),
-							curNode.getCoords().getY()*-1));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotateMin90YZ(curNode.getNext()));
-		
-		return rotated;
-	}
-	private static Node rotate180X(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getX()*-1,
-							curNode.getCoords().getY(),
-							curNode.getCoords().getZ()));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotate180X(curNode.getNext()));
-		
-		return rotated;
-	}
-	private static Node rotate180Y(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getX(),
-							curNode.getCoords().getY()*-1,
-							curNode.getCoords().getZ()));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotate180Y(curNode.getNext()));
-		
-		return rotated;
-	}
-	private static Node rotate180Z(Node curNode)
-	{
-		Node rotated = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getX(),
-							curNode.getCoords().getY(),
-							curNode.getCoords().getZ()*-1));
-		if (curNode.getNext() != null)
-			rotated.setNext(rotate180Z(curNode.getNext()));
-		
-		return rotated;
-	}
-	
-	private static ArrayList<Node> getRotations(Node start)
-	{
-		ArrayList<Node> rotations = new ArrayList<Node>();
-		
-		rotations.add(rotatePlus90XY(start));
-		rotations.add(rotatePlus90XZ(start));
-		rotations.add(rotatePlus90YZ(start));
-		rotations.add(rotateMin90XY(start));
-		rotations.add(rotateMin90XZ(start));
-		rotations.add(rotateMin90YZ(start));
-		rotations.add(rotate180X(start));
-		rotations.add(rotate180Y(start));
-		rotations.add(rotate180Z(start));
-		
-		return rotations;
-	}
-	
-	private static Node moveNode(Node curNode, Coords newPos)
-	{
-		Node moved = new Node(curNode.getCharge(),
-				new Coords(	curNode.getCoords().getX()+newPos.getX(),
-							curNode.getCoords().getY()+newPos.getY(),
-							curNode.getCoords().getZ()+newPos.getZ()));
-		if (curNode.getNext() != null)
-			moved.setNext(moveNode(curNode.getNext(), newPos));
-		
-		return moved; 
-	}
-	
-	private static ArrayList<Node> append(Node first, Node second)
-	{
-		ArrayList<Node> possibleFolds = new ArrayList<Node>();
-		Node end = first;
-		while(end.getNext() != null)
-			end = end.getNext();
-		
-		ArrayList<Coords> testPositions = getSurroundingCoords(end);
-		ArrayList<Node> secondRotations = getRotations(second);
-		int lowestEnergy = 0;
-		
-		for(int i=0; i<testPositions.size(); i++)
-		{
-			for (int j=0; j<secondRotations.size(); j++)
-			{
-				Node testNode = moveNode(secondRotations.get(j), testPositions.get(i));
-				if (!willOverlap(first, testNode))
-				{
-					Node newFold = first.clone();
-					newFold.getLast().setNext(testNode);
-					possibleFolds.add(newFold);
-					int newEnergy = energy(newFold);
-					if (newEnergy < lowestEnergy)
-						lowestEnergy = newEnergy;
-				}
-			}	
-		}
-		
-		for (int i=0; i<possibleFolds.size();)
-			if (energy(possibleFolds.get(i)) > lowestEnergy)
-				possibleFolds.remove(i);
-			else
-				i++;
-		/*
-		int current = 0;
-		int next = 1; 
-		while(current < possibleFolds.size()-1)
-		{
-			ArrayList<Node> rotations = getRotations(possibleFolds.get(current));
-			while (next < possibleFolds.size())
-			{
-				if (rotations.contains(possibleFolds.get(next)))
-					//possibleFolds.remove(next);
-				else
-					next++;
-			}
-			current++;
-		}
-		*/
-		return possibleFolds;
-	}
-	
-	private static ArrayList<Coords> getSurroundingCoords(Node end)
-	{
-		ArrayList<Coords> surroundingCoords = new ArrayList<Coords>();
-		int x = end.getCoords().getX();
-		int y = end.getCoords().getY();
-		int z = end.getCoords().getZ();
-		
-		surroundingCoords.add(new Coords(x+1, y, z));
-		surroundingCoords.add(new Coords(x-1, y, z));
-		surroundingCoords.add(new Coords(x, y+1, z));
-		surroundingCoords.add(new Coords(x, y-1, z));
-		surroundingCoords.add(new Coords(x, y, z+1));
-		surroundingCoords.add(new Coords(x, y, z-1));
-		
-		return surroundingCoords;
-	}
+    /**
+     * Given two chains, try to attach the second chain to the 6 side of the last node in the first chain. A combination
+     * is only valid if the nodes do not overlap together.
+     * @param frontChain
+     * @param behindChain
+     */
+    public static void check(Node frontChain, Node behindChain) {
+
+        int[][] shifts = {{1,0,0},{-1,0,0},{0,1,0},{0,-1,0},{0,0,1},{0,0,-1}};
+
+        //Find the last node in the chain so we can append the second chain to it.
+        Node lastNode = frontChain.getLast();
+
+        //For each rotations, the front node of the second chain can be attached to any of the 4 adjacent cells of
+        // the last node of the first chain.
+        for(int[] shift: shifts) {
+            Node transformedChain = shift(behindChain, lastNode.getCoords().getX()+shift[0], lastNode.getCoords().getY()+shift[1], lastNode.getCoords().getZ()+shift[2]);
+
+            //If the combination is valid (meaning that the chains do not overlap), then add it to the valid nodes.
+            if(!willOverlap(frontChain, transformedChain)) {
+
+                //Create a new chain by appending the transformed chain to the back of the front chain.
+                Node newFrontChain = duplicate(frontChain);
+                Node frontChainLastNode = newFrontChain.getLast();
+
+                //Update the next and previous references
+                frontChainLastNode.setNext(transformedChain);
+                transformedChain.setPrevious(frontChainLastNode);
+
+                //Calculate the energy level of the structure.
+                int energyLevel = energy(newFrontChain);
+
+                //If it equals the max energy level found, add it to the valid chains.
+                if(energyLevel == currentMaxEnergyLevel) {
+                    validChains.add(newFrontChain);
+                }
+                //If it is less then, then reset the valid chains and add it since we only care about the lowest ones.
+                else if(energyLevel < currentMaxEnergyLevel) {
+                    validChains = new ArrayList<Node>();
+                    validChains.add(newFrontChain);
+                    currentMaxEnergyLevel = energyLevel;
+                }
+                //If the energy level is less then the max, ignore it since the algorithm is greedy and only cares
+                // about finding the shapes with the lowest energy levels.
+            }
+        }
+    }
+
+
+    /**
+     * Function that rolls the chain where roll rotates the chain 90 degrees away from you. This means the bottom is now
+     * the side facing you.
+     * @param frontChain - Head node of the chain.
+     */
+    public static void roll(Node frontChain) {
+
+        Node nextNode = frontChain;
+
+        do {
+            int tempX = nextNode.getCoords().getX();
+            int tempY = nextNode.getCoords().getY();
+            int tempZ = nextNode.getCoords().getZ();
+
+            nextNode.getCoords().setX(tempX);
+            nextNode.getCoords().setY(tempZ);
+            nextNode.getCoords().setZ(-tempY);
+
+            nextNode = nextNode.getNext();
+        } while (nextNode != null);
+
+    }
+
+    /**
+     * Function that turns the chain where turn rotates the chain 90 degrees about the z axis. So the top side becomes
+     * the left side of the new chain.
+     * @param frontChain - Head node of the chain.
+     */
+    public static void turn(Node frontChain) {
+
+        Node nextNode = frontChain;
+
+        do {
+            int tempX = nextNode.getCoords().getX();
+            int tempY = nextNode.getCoords().getY();
+            int tempZ = nextNode.getCoords().getZ();
+
+            nextNode.getCoords().setX(-tempY);
+            nextNode.getCoords().setY(tempX);
+            nextNode.getCoords().setZ(tempZ);
+
+            nextNode = nextNode.getNext();
+        } while (nextNode != null);
+
+    }
+
+    /**
+     * Returns a new copy of the node chain with the given shift applied to it.
+     * @param nodeChain - The first node in the chain.
+     * @param shiftX - How much to shift the chain in the x direction.
+     * @param shiftY - How much to shift the chain in the y direction.
+     * @return The first node in the shifted chain.
+     */
+    public static Node shift(Node nodeChain, int shiftX, int shiftY, int shiftZ) {
+        Node newHead = duplicate(nodeChain);
+        Node nextNode = newHead;
+        do {
+            nextNode.getCoords().setX(nextNode.getCoords().getX()+shiftX);
+            nextNode.getCoords().setY(nextNode.getCoords().getY()+shiftY);
+            nextNode.getCoords().setZ(nextNode.getCoords().getZ()+shiftZ);
+            nextNode = nextNode.getNext();
+        } while(nextNode != null);
+
+        return  newHead;
+    }
+
+    /**
+     * Duplicates the given node chain.
+     * @param oldHead - The first node in the chain to be duplicated.
+     * @return The first node in the new chain.
+     */
+    public static Node duplicate(Node oldHead) {
+        Node newHead = oldHead.clone();
+
+        Node oldTemp = oldHead;
+        Node newTemp = newHead;
+
+        while(oldTemp.hasNext()) {
+            Node oldNext = oldTemp.getNext();
+            Node newNext = oldNext.clone();
+            newTemp.setNext(newNext);
+            newNext.setPrevious(newTemp);
+            oldTemp = oldNext;
+            newTemp = newNext;
+        }
+
+        return newHead;
+    }
+
+    public static void printChain(Node nodeChain) {
+
+        do {
+            System.out.println(nodeChain);
+            nodeChain = nodeChain.getNext();
+        } while(nodeChain != null);
+    }
 }
