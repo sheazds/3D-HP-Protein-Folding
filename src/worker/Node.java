@@ -64,6 +64,12 @@ public class Node implements Comparable
 	public void setNext(Node next) {
 		this.next = next;
 	}
+	public boolean hasNext() {
+		if (next != null)
+			return true;
+		else
+			return false;
+	}
 
 	public Node getPrevious() {
 		return previous;
