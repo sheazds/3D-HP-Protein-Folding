@@ -41,6 +41,7 @@ public class Dynamic_Fold
 	}
 	
 	
+	
 	//Returns true if node sequence contains an overlap
 	private static boolean overlaps(Node start)
 	{
@@ -119,7 +120,7 @@ public class Dynamic_Fold
 				if (chargeLocs.contains(testCoords))
 					energy--;
 				//(0,0,1)
-				testCoords.setZ(testCoords.getZ()-1);
+				testCoords.setZ(testCoords.getZ()+2);
 				if (chargeLocs.contains(testCoords))
 					energy--;
 			}			
@@ -250,6 +251,40 @@ public class Dynamic_Fold
 		
 		return rotated;
 	}
+	private static Node rotate180X(Node curNode)
+	{
+		Node rotated = new Node(curNode.getCharge(),
+				new Coords(	curNode.getCoords().getX()*-1,
+							curNode.getCoords().getY(),
+							curNode.getCoords().getZ()));
+		if (curNode.getNext() != null)
+			rotated.setNext(rotate180X(curNode.getNext()));
+		
+		return rotated;
+	}
+	private static Node rotate180Y(Node curNode)
+	{
+		Node rotated = new Node(curNode.getCharge(),
+				new Coords(	curNode.getCoords().getX(),
+							curNode.getCoords().getY()*-1,
+							curNode.getCoords().getZ()));
+		if (curNode.getNext() != null)
+			rotated.setNext(rotate180Y(curNode.getNext()));
+		
+		return rotated;
+	}
+	private static Node rotate180Z(Node curNode)
+	{
+		Node rotated = new Node(curNode.getCharge(),
+				new Coords(	curNode.getCoords().getX(),
+							curNode.getCoords().getY(),
+							curNode.getCoords().getZ()*-1));
+		if (curNode.getNext() != null)
+			rotated.setNext(rotate180Z(curNode.getNext()));
+		
+		return rotated;
+	}
+	
 	private static ArrayList<Node> getRotations(Node start)
 	{
 		ArrayList<Node> rotations = new ArrayList<Node>();
@@ -260,6 +295,9 @@ public class Dynamic_Fold
 		rotations.add(rotateMin90XY(start));
 		rotations.add(rotateMin90XZ(start));
 		rotations.add(rotateMin90YZ(start));
+		rotations.add(rotate180X(start));
+		rotations.add(rotate180Y(start));
+		rotations.add(rotate180Z(start));
 		
 		return rotations;
 	}
@@ -285,6 +323,7 @@ public class Dynamic_Fold
 		
 		ArrayList<Coords> testPositions = getSurroundingCoords(end);
 		ArrayList<Node> secondRotations = getRotations(second);
+		int lowestEnergy = 0;
 		
 		for(int i=0; i<testPositions.size(); i++)
 		{
@@ -296,10 +335,19 @@ public class Dynamic_Fold
 					Node newFold = first.clone();
 					newFold.getLast().setNext(testNode);
 					possibleFolds.add(newFold);
+					int newEnergy = energy(newFold);
+					if (newEnergy < lowestEnergy)
+						lowestEnergy = newEnergy;
 				}
-			}
-				
+			}	
 		}
+		
+		for (int i=0; i<possibleFolds.size();)
+			if (energy(possibleFolds.get(i)) > lowestEnergy)
+				possibleFolds.remove(i);
+			else
+				i++;
+		
 		return possibleFolds;
 	}
 	
