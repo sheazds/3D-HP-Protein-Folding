@@ -46,6 +46,14 @@ public class Node {
 		}
 		this.charge = charge;
 	}
+	
+	public Node getLast()
+	{
+		if (next == null)
+			return this;
+		else
+			return next.getLast();
+	}
 
 	public Node getNext() {
 		return next;
@@ -71,5 +79,11 @@ public class Node {
 		this.coords = coords;
 	}
 	
-	
+	public Node clone()
+	{
+		Node clone = new Node(charge, new Coords(coords.getX(), coords.getY(), coords.getZ()));
+		if (next != null)
+			 clone.setNext(next.clone());
+		return clone;
+	}
 }

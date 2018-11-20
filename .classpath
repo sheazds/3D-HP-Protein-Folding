@@ -17,5 +17,6 @@
 	<classpathentry kind="lib" path="lib/naga-3_0.jar"/>
 	<classpathentry kind="lib" path="lib/netscape.jar"/>
 	<classpathentry kind="lib" path="lib/saxon.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Java3DLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
