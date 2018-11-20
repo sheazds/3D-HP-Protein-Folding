@@ -5,18 +5,25 @@ import java.util.Scanner;
 
 public class SplitString {
 	public static void main(String []args) {
-		SplitString();
+		ArrayList<ArrayList<Node>> output= SplitString();
+		for(ArrayList<Node> t:output) {
+			for(Node n: t) {
+				System.out.println("charge: "+n.getCharge()
+				+ "  "+n.getCoords().toString());
+			}
+		}
+		
 		
 	}
-	private static ArrayList<LinkList> SplitString() {
-		ArrayList<LinkList> myList= new ArrayList<LinkList>();
+	private static ArrayList<ArrayList<Node>> SplitString() {
+		ArrayList<ArrayList<Node>> myList= new ArrayList<ArrayList<Node>>();
 		Scanner sc = new Scanner(System.in);
 		String str = null;
 		System.out.println("Please enter your sequence: ");
 		str = sc.nextLine();
 		
 		System.out.println("your sequence is: "+"\n"+str);
-		String[] ss= new String[50];
+		String[] ss= new String[100];
 		int count = 0;
 		ss[count]="";
 		for(int i=0; i<str.length();i++) {
@@ -34,7 +41,9 @@ public class SplitString {
 				ss[count]=ss[count].concat(b);
 			}
 			
-		}
+		} 
+		//System.out.println(ss[0]+"....");
+		
 		if(ss[0]=="") {
 			for(int i=0; i<ss.length-1;i++) {
 				
@@ -42,27 +51,36 @@ public class SplitString {
 			}
 			count--;
 		}
-		
 		for( int i = 0 ; i <=count ; i++){
-			LinkList myLinkList= new LinkList();
-			
+			ArrayList<Node> myNodeList= new ArrayList<Node>();
+			Node node= new Node();
+			Coords coords= new Coords();
 			//System.out.println("ss["+i+"]="+ss[i]);
 			// the first line if exist, only contain Ps.
 			if(ss[i].charAt(0)=='p') {
 				
 				for(int j=0; j<ss[0].length();j++) {
-					myLinkList.addNode(0, j, "p");
+					coords= new Coords(0,j,0);
+					node=new Node('p',coords);
+					myNodeList.add(node);
 					
 				}
 				//System.out.println();
-				myList.add(myLinkList);
-			}else if(ss[i].charAt(0)=='h') {
+				myList.add(myNodeList);
+			}else if(ss[i].charAt(0)=='h'){
 				//start from second line, the start char must be h
 				for(int j = 0; j<ss[i].length();j++) {
-					myLinkList.addNode(0, j, ss[i].substring(j));
+					coords= new Coords(0,j,0);
+					if(ss[i].charAt(j)=='p') {
+						node=new Node('p',coords);
+					}else if(ss[i].charAt(j)=='h') {
+						node= new Node('h',coords);
+					}
+					
+					myNodeList.add(node);
 					
 				}
-				myList.add(myLinkList);
+				myList.add(myNodeList);
 			
 			}
 			}
