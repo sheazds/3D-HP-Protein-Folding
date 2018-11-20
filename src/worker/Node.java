@@ -1,6 +1,6 @@
 package worker;
 /**
- * 
+ *
  * Node.java
  *
  * This class represent one amino acid of a protein. It can either be
@@ -11,64 +11,82 @@ package worker;
  * @date 2013-03-16
  */
 public class Node {
-	private char charge;
-	private Node next; 
-	private Node previous;
-	private Coords coords;
-	
-	public Node(){
-		this.coords = null;
-		this.next = null;
-		this.previous = null;
-	}
+    private char charge;
+    private Node next;
+    private Node previous;
+    private Coords coords;
 
-	public Node(char charge, Coords coords) {
-		this.coords = new Coords();
-		this.coords.setX(coords.getX());
-		this.coords.setY(coords.getY());
-		this.coords.setZ(coords.getZ());
-		this.charge = charge;
-		this.next = null;
-		this.previous = null;
-	}
-	
-	public String toString(){
-		return "Node Charge: " + this.charge + ", " + this.coords;
-	}
-	
-	public char getCharge(){
-		return this.charge;
-	}
-	public void setCharge(char charge){
-		if(charge != 'h' || charge != 'p'){
-			System.out.println("Tried to assign " + charge + " to a node.");
-		}
-		this.charge = charge;
-	}
+    public Node(){
+        this.coords = null;
+        this.next = null;
+        this.previous = null;
+    }
 
-	public Node getNext() {
-		return next;
-	}
+    public Node(char charge, Coords coords) {
+        this.coords = new Coords();
+        this.coords.setX(coords.getX());
+        this.coords.setY(coords.getY());
+        this.coords.setZ(coords.getZ());
+        this.charge = charge;
+        this.next = null;
+        this.previous = null;
+    }
 
-	public void setNext(Node next) {
-		this.next = next;
-	}
+    public String toString(){
+        return "Node Charge: " + this.charge + ", " + this.coords;
+    }
 
-	public Node getPrevious() {
-		return previous;
-	}
+    public char getCharge(){
+        return this.charge;
+    }
+    public void setCharge(char charge){
+        if(charge != 'h' || charge != 'p'){
+            System.out.println("Tried to assign " + charge + " to a node.");
+        }
+        this.charge = charge;
+    }
 
-	public void setPrevious(Node previous) {
-		this.previous = previous;
-	}
+    public Node getLast()
+    {
+        if (next == null)
+            return this;
+        else
+            return next.getLast();
+    }
 
-	public Coords getCoords() {
-		return coords;
-	}
+    public Node getNext() {
+        return next;
+    }
 
-	public void setCoords(Coords coords) {
-		this.coords = coords;
-	}
-	
-	
+    public void setNext(Node next) {
+        this.next = next;
+    }
+
+    public Node getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(Node previous) {
+        this.previous = previous;
+    }
+
+    public Coords getCoords() {
+        return coords;
+    }
+
+    public void setCoords(Coords coords) {
+        this.coords = coords;
+    }
+
+    public Node clone()
+    {
+        Node clone = new Node(charge, new Coords(coords.getX(), coords.getY(), coords.getZ()));
+        if (next != null)
+            clone.setNext(next.clone());
+        return clone;
+    }
+
+    public boolean hasNext() {
+        return !(next == null);
+    }
 }
