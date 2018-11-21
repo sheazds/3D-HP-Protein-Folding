@@ -249,7 +249,8 @@ public class Dynamic_Fold
 
                 //If it equals the max energy level found, add it to the valid chains.
                 if(energyLevel == currentMaxEnergyLevel) {
-                    validChains.add(newFrontChain);
+                	if (!validChains.contains(newFrontChain))
+                		validChains.add(newFrontChain);
                 }
                 //If it is less then, then reset the valid chains and add it since we only care about the lowest ones.
                 else if(energyLevel < currentMaxEnergyLevel) {

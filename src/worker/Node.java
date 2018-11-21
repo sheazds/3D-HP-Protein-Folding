@@ -97,7 +97,6 @@ public class Node implements Comparable
 
 	@Override
 	public int compareTo(Object arg0) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	
@@ -109,7 +108,14 @@ public class Node implements Comparable
 		if(coords.getX() == ((Node) another).getCoords().getX() 
 				&& coords.getY() == ((Node) another).coords.getY()
 				&& coords.getZ() == ((Node) another).coords.getZ())
-					return next.equals(((Node) another).getNext());
+			if (next != null && (((Node) another).hasNext()))
+				return next.equals(((Node) another).getNext());
+			else if (next != null && (!((Node) another).hasNext()))
+				return false;
+			else if (next == null && (((Node) another).hasNext()))
+				return false;
+			else
+				return true;
 		return false;
 	}
 	@Override
