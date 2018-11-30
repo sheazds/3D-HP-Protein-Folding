@@ -51,6 +51,14 @@ public class SplitString {
 			}
 			count--;
 		}
+		if(ss[0]=="") {
+			for(int i=0; i<ss.length-1;i++) {
+				
+				ss[i]=ss[i+1];
+			}
+			count--;
+		}
+		
 		for( int i = 0 ; i <=count ; i++){
 			ArrayList<Node> myNodeList= new ArrayList<Node>();
 			Node node= new Node();
@@ -66,7 +74,7 @@ public class SplitString {
 					
 				}
 				//System.out.println();
-				myList.add(myNodeList);
+				myList.add(myLinkList);
 			}else if(ss[i].charAt(0)=='h'){
 				//start from second line, the start char must be h
 				for(int j = 0; j<ss[i].length();j++) {
