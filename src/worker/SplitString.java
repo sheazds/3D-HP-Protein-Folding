@@ -60,7 +60,7 @@ public class SplitString {
 			if(ss[i].charAt(0)=='p') {
 				
 				for(int j=0; j<ss[0].length();j++) {
-					coords= new Coords(0,j,0);
+					coords= new Coords(j,0,0);
 					node=new Node('p',coords);
 					myNodeList.add(node);
 					
@@ -70,7 +70,7 @@ public class SplitString {
 			}else if(ss[i].charAt(0)=='h'){
 				//start from second line, the start char must be h
 				for(int j = 0; j<ss[i].length();j++) {
-					coords= new Coords(0,j,0);
+					coords= new Coords(j,0,0);
 					if(ss[i].charAt(j)=='p') {
 						node=new Node('p',coords);
 					}else if(ss[i].charAt(j)=='h') {
