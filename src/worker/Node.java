@@ -133,4 +133,15 @@ public class Node implements Comparable
 			hash = hash + next.hashCode();
 		return hash;
 	}
+	
+	public void printChain()
+	{
+		Node next = this;
+		while (next != null)
+		{
+			System.out.print(next+" ");
+			next = next.getNext();
+		}
+		System.out.println("");
+	}
 }

@@ -2,42 +2,14 @@ package worker;
 
 import java.util.ArrayList;
 
-public class Dynamic_Fold
+public class DynamicFold
 {
 	public static void main(String[] args)
 	{
-		ArrayList<Node> nodeChains = splitString("hphpphppphpppp");
-		System.out.println(nodeChains.size());
-		for(int i=0; i<nodeChains.size(); i++)
-		{
-			Node current = nodeChains.get(i);
-			do
-			{
-				System.out.print(current + "  ");
-				current = current.getNext();
-			}
-			while (current != null);
-			System.out.println();
-		}
-		ArrayList<ArrayList<Node>> results = selfFold(nodeChains);
-		for (int i=0; i<results.size(); i++)
-		{
-			ArrayList<Node> currentResult = results.get(i);
-			System.out.println("Array "+(i+1));
-			for (int j=0; j<currentResult.size(); j++)
-			{
-				Node next = currentResult.get(j);
-				while (next !=null)
-				{
-					System.out.print(next+" ");
-					next = next.getNext();
-				}
-				System.out.println();
-			}
-		}
+
 	}
 	
-	private static ArrayList<ArrayList<Node>> selfFold(ArrayList<Node> nodeChains)
+	static ArrayList<ArrayList<Node>> selfFold(ArrayList<Node> nodeChains)
 	{
 		ArrayList<ArrayList<Node>> results = new ArrayList<ArrayList<Node>>(nodeChains.size());
 		for (int i=0; i<nodeChains.size(); i++)
@@ -162,7 +134,7 @@ public class Dynamic_Fold
 		return energy;
 	}
 	
-	private static ArrayList<Node> splitString(String str)
+	static ArrayList<Node> splitString(String str)
 	{	
 		int hCount = str.length() - str.replace("h", "").length();
 		String[] ss= new String[hCount+1];
