@@ -28,7 +28,8 @@ public class Coords implements Comparable{
 	}
 	
 	public String toString(){
-		return "Coords: x = " + this.x + ", y = " + this.y + ", z = " + this.z;
+		//return "Coords: x = " + this.x + ", y = " + this.y + ", z = " + this.z;
+		return "{"+x+","+y+","+z+"}";
 	}
 	
 	public void print(){

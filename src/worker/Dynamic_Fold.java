@@ -1,50 +1,81 @@
 package worker;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Dynamic_Fold
 {
 	public static void main(String[] args)
 	{
-		Node start = new Node('H', new Coords(0,0,0));
-		Node next = start;
-		
-		for(int i=1; i<2; i++)
+		ArrayList<Node> nodeChains = splitString("hphpphppphpppp");
+		System.out.println(nodeChains.size());
+		for(int i=0; i<nodeChains.size(); i++)
 		{
-			next.setNext(new Node('H', new Coords(i,0,0)));
-			next = next.getNext();
-		}
-		
-		Node second = new Node('H', new Coords(0,0,0));
-		next = second;
-		
-		for(int i=1; i<2; i++)
-		{
-			next.setNext(new Node('H', new Coords(i,0,0)));
-			next = next.getNext();
-		}
-		
-		generateCombinations(start, second);
-		
-		System.out.println(validChains.size());
-		next = validChains.get(0);
-		for (int i=0; i<validChains.size(); i++)
-		{
-			next = validChains.get(i);
-			while (next !=null)
+			Node current = nodeChains.get(i);
+			do
 			{
-				System.out.print("["+next.getCoords().getX()+","+next.getCoords().getY()+","+next.getCoords().getZ()+"],");
-				next = next.getNext();
+				System.out.print(current + "  ");
+				current = current.getNext();
 			}
+			while (current != null);
 			System.out.println();
 		}
-		
+		ArrayList<ArrayList<Node>> results = selfFold(nodeChains);
+		for (int i=0; i<results.size(); i++)
+		{
+			ArrayList<Node> currentResult = results.get(i);
+			System.out.println("Array "+(i+1));
+			for (int j=0; j<currentResult.size(); j++)
+			{
+				Node next = currentResult.get(j);
+				while (next !=null)
+				{
+					System.out.print(next+" ");
+					next = next.getNext();
+				}
+				System.out.println();
+			}
+		}
 	}
 	
+	private static ArrayList<ArrayList<Node>> selfFold(ArrayList<Node> nodeChains)
+	{
+		ArrayList<ArrayList<Node>> results = new ArrayList<ArrayList<Node>>(nodeChains.size());
+		for (int i=0; i<nodeChains.size(); i++)
+		{
+			Node currentChain = nodeChains.get(i);
+			if (currentChain.getLength() <= 2) //chain can't fold
+			{
+				ArrayList<Node> result = new ArrayList<Node>();
+				result.add(currentChain);
+				results.add(result);
+			}
+			else	//fold chain starting at 2nd node
+			{
+				Node currentNode = currentChain.getNext().getNext();
+				currentChain.getNext().setNext(null);
+				Node nextNode = currentNode;
+				ArrayList<Node> chains = new ArrayList<Node>();
+				chains.add(currentChain);
+				do
+				{	
+					nextNode = currentNode.getNext();
+					currentNode.setNext(null);
+					currentNode.setCoords(new Coords(0,0,0));
+					for (int j=0; j<chains.size(); j++)
+						generateCombinations(chains.get(j), currentNode);
+					chains.clear();
+					chains.addAll(validChains);
+					validChains.clear();
+					currentNode = nextNode;
+				} while (nextNode != null);
+				
+				results.add(chains);
+			}			
+		}
+		return results;
+	}
 	
-	
-	//Returns true if node sequence contains an overlap
+	//Returns true if node sequence contains an overlap within itself
 	private static boolean overlaps(Node start)
 	{
 		ArrayList<Coords> visited = new ArrayList<Coords>();
@@ -59,7 +90,7 @@ public class Dynamic_Fold
 		return false;
 	}
 	
-	//Returns true if two Node chains will overlap
+	//Returns true if two Node chains will overlap with each other
 	private static boolean willOverlap(Node first, Node second)
 	{
 		ArrayList<Coords> visited = new ArrayList<Coords>();
@@ -131,60 +162,54 @@ public class Dynamic_Fold
 		return energy;
 	}
 	
-	private static ArrayList<LinkList> SplitString()
-	{
-		ArrayList<LinkList> myList= new ArrayList<LinkList>();
-		Scanner sc = new Scanner(System.in);
-		String str = null;
-		System.out.println("Please enter your sequence: ");
-		str = sc.nextLine();
-		
-		System.out.println("your sequence is: "+"\n"+str);
-		String[] ss = new String[50];
+	private static ArrayList<Node> splitString(String str)
+	{	
+		int hCount = str.length() - str.replace("h", "").length();
+		String[] ss= new String[hCount+1];
+		for (int i=0; i<ss.length; i++)
+			ss[i] = "";
 		int count = 0;
-		ss[count]="";
-		for(int i=0; i<str.length();i++)
+		for(int i=0; i<str.length(); i++)
 		{
 			char a = str.charAt(i);
 			String b = ""+ a;
-			if(a!=72 && a!= 104 && a!=80 && a!=112)
-			{
-				System.out.println("please enter a hp sequence.");
-				System.out.println(a+" is not h or p");
-				break;
-			}
 			if( a==72 || a==104 )
 			{
 				count++;
-				ss[count]=b;
-			}else
-				ss[count]=ss[count].concat(b);
-			
-		}
-		
-		for( int i = 0 ; i <=count ; i++)
-		{
-			LinkList myLinkList= new LinkList();
-			
-			//System.out.println("ss["+i+"]="+ss[i]);
-			// the first line if exist, only contain Ps.
-			if(ss[i].charAt(0)=='p')
-			{
-				for(int j=0; j<ss[0].length();j++)
-					myLinkList.addNode(0, j, "p");
-					
-				//System.out.println();
-				myList.add(myLinkList);
+				ss[count] = b;
 			}
 			else
+				ss[count] = ss[count].concat(b);
+		}
+		
+		if(ss[0]=="")
+		{
+			String[] ss2 = new String[ss.length-1];
+			for (int i=1; i<ss.length; i++)
+				ss2[i-1] = ss[i];
+			ss = ss2;
+		}
+		
+		ArrayList<Node> nodeChainList = new ArrayList<Node>();
+		for( int i=0; i<ss.length; i++)
+		{
+			Node lastNode = null;
+			for(int j=0; j<ss[i].length(); j++)
 			{
-				//start from second line, the start char must be h
-				for(int j = 0; j<ss[i].length();j++)
-					myLinkList.addNode(0, j, ss[i].substring(j));
-				myList.add(myLinkList);
+				Coords coords = new Coords(j,0,0);
+				Node node = new Node(ss[i].charAt(j),coords);
+				if (lastNode != null)
+				{
+					node.setPrevious(lastNode);
+					lastNode.setNext(node);
+				}
+				else
+					nodeChainList.add(node);
+				lastNode = node;
 			}
 		}
-		return myList;
+			
+		return nodeChainList;
 	}
 	
 	static ArrayList<Node> validChains = new ArrayList<Node>();

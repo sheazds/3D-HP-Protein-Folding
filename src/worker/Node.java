@@ -36,17 +36,24 @@ public class Node implements Comparable
 	}
 	
 	public String toString(){
-		return "Node Charge: " + this.charge + ", " + this.coords;
+		//return "Node Charge: " + this.charge + ", " + this.coords;
+		return ""+this.charge+":"+this.coords+";";
 	}
 	
 	public char getCharge(){
 		return this.charge;
 	}
 	public void setCharge(char charge){
-		if(charge != 'h' || charge != 'p'){
+		if(charge != 'h' && charge != 'p')
 			System.out.println("Tried to assign " + charge + " to a node.");
-		}
 		this.charge = charge;
+	}
+	public int getLength()
+	{
+		if (next != null)
+			return 1 + next.getLength();
+		else
+			return 1;
 	}
 	
 	public Node getLast()
