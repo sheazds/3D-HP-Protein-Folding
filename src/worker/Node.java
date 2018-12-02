@@ -1,4 +1,5 @@
 package worker;
+
 /**
  * 
  * Node.java
@@ -10,7 +11,9 @@ package worker;
  * @author Aaron Germuth
  * @date 2013-03-16
  */
-public class Node {
+@SuppressWarnings("rawtypes")
+public class Node implements Comparable
+{
 	private char charge;
 	private Node next; 
 	private Node previous;
@@ -33,17 +36,32 @@ public class Node {
 	}
 	
 	public String toString(){
-		return "Node Charge: " + this.charge + ", " + this.coords;
+		//return "Node Charge: " + this.charge + ", " + this.coords;
+		return ""+this.charge+":"+this.coords+";";
 	}
 	
 	public char getCharge(){
 		return this.charge;
 	}
 	public void setCharge(char charge){
-		if(charge != 'h' || charge != 'p'){
+		if(charge != 'h' && charge != 'p')
 			System.out.println("Tried to assign " + charge + " to a node.");
-		}
 		this.charge = charge;
+	}
+	public int getLength()
+	{
+		if (next != null)
+			return 1 + next.getLength();
+		else
+			return 1;
+	}
+	
+	public Node getLast()
+	{
+		if (next == null)
+			return this;
+		else
+			return next.getLast();
 	}
 
 	public Node getNext() {
@@ -52,6 +70,12 @@ public class Node {
 
 	public void setNext(Node next) {
 		this.next = next;
+	}
+	public boolean hasNext() {
+		if (next != null)
+			return true;
+		else
+			return false;
 	}
 
 	public Node getPrevious() {
@@ -70,5 +94,43 @@ public class Node {
 		this.coords = coords;
 	}
 	
+	public Node clone()
+	{
+		Node clone = new Node(charge, new Coords(coords.getX(), coords.getY(), coords.getZ()));
+		if (next != null)
+			 clone.setNext(next.clone());
+		return clone;
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		return 0;
+	}
 	
+	@Override
+	public boolean equals(Object another)
+	{
+		if (!(another instanceof Node))
+			return false;
+		if(coords.getX() == ((Node) another).getCoords().getX() 
+				&& coords.getY() == ((Node) another).coords.getY()
+				&& coords.getZ() == ((Node) another).coords.getZ())
+			if (next != null && (((Node) another).hasNext()))
+				return next.equals(((Node) another).getNext());
+			else if (next != null && (!((Node) another).hasNext()))
+				return false;
+			else if (next == null && (((Node) another).hasNext()))
+				return false;
+			else
+				return true;
+		return false;
+	}
+	@Override
+	public int hashCode()
+	{
+		int hash = this.coords.getX()+this.coords.getY()+this.coords.getZ();
+		if (next != null)
+			hash = hash + next.hashCode();
+		return hash;
+	}
 }
