@@ -6,22 +6,31 @@ public class DynamicFold
 {
 	public static void main(String[] args)
 	{
-
+		ArrayList<Node> nodeChains = DynamicFold.splitString("ppphphpphppphpppphppppp");
+		ArrayList<ArrayList<Node>> foldedNodeChains = selfFold(nodeChains);
+		for (int i=0; i<foldedNodeChains.size(); i++)
+		{
+			for (int j=0; j<foldedNodeChains.get(i).size(); j++)
+				foldedNodeChains.get(i).get(j).printChain();
+			System.out.println("");
+		}
 	}
 	
 	static ArrayList<ArrayList<Node>> selfFold(ArrayList<Node> nodeChains)
 	{
 		ArrayList<ArrayList<Node>> results = new ArrayList<ArrayList<Node>>(nodeChains.size());
-		for (int i=0; i<nodeChains.size(); i++)
+		int startP = 1;
+		//If protein string starts with p fold it by itself before dynamic folding
+		if (nodeChains.get(0).getCharge() == 'p')
 		{
-			Node currentChain = nodeChains.get(i);
+			Node currentChain = nodeChains.get(0);
 			if (currentChain.getLength() <= 2) //chain can't fold
 			{
 				ArrayList<Node> result = new ArrayList<Node>();
 				result.add(currentChain);
 				results.add(result);
 			}
-			else	//fold chain starting at 2nd node
+			else //fold chain starting at 2nd node
 			{
 				Node currentNode = currentChain.getNext().getNext();
 				currentChain.getNext().setNext(null);
@@ -42,8 +51,43 @@ public class DynamicFold
 				} while (nextNode != null);
 				
 				results.add(chains);
-			}			
+			}	
 		}
+		else //protein string starts with h so fold everything dynamically
+			startP = 0;
+		
+		//initialize base cases
+		ArrayList<ArrayList<Node>> resultsSoFar = new ArrayList<ArrayList<Node>>();
+		ArrayList<Node> result1 = new ArrayList<Node>();
+		result1.add(new Node('h', new Coords(0,0,0)));
+		resultsSoFar.add(result1);
+		ArrayList<Node> result2 = new ArrayList<Node>();
+		result2.add(new Node('h', new Coords(0,0,0)));
+		result2.get(0).setNext(new Node('p', new Coords(1,0,0)));
+		resultsSoFar.add(result2);
+		
+		//Dynamically fold
+		for (int i=0+startP; i<nodeChains.size(); i++)
+		{
+			Node currentChain = nodeChains.get(i);
+			int size = currentChain.getLength();
+			while (size > resultsSoFar.size())
+			{
+				int cursor = resultsSoFar.size();
+				Node currentNode = currentChain;
+				for (int j=0; j<cursor; j++)
+					currentNode.getNext();
+				currentNode = new Node(currentNode.getCharge(), new Coords(0,0,0));
+				
+				ArrayList<Node> baseResults = resultsSoFar.get(resultsSoFar.size()-1);
+				for (int j=0; j<baseResults.size(); j++)
+					generateCombinations(baseResults.get(j), currentNode);
+				resultsSoFar.add(validChains);
+				validChains = new ArrayList<Node>();
+			}
+			results.add(resultsSoFar.get(size-1));
+		}
+		
 		return results;
 	}
 	
