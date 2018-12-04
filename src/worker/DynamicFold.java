@@ -6,8 +6,14 @@ public class DynamicFold
 {
 	public static void main(String[] args)
 	{
-		ArrayList<Node> nodeChains = DynamicFold.splitString("ppphphpphppphpppphppppp");
+		long startTime = System.currentTimeMillis();
+		ArrayList<Node> nodeChains = DynamicFold.splitString("hpph");
+		//for (int i=0; i<nodeChains.size(); i++)
+				//nodeChains.get(i).printChain();
+		System.out.println("");
+		
 		ArrayList<ArrayList<Node>> foldedNodeChains = selfFold(nodeChains);
+		System.out.println(System.currentTimeMillis() - startTime);
 		for (int i=0; i<foldedNodeChains.size(); i++)
 		{
 			for (int j=0; j<foldedNodeChains.get(i).size(); j++)
@@ -76,7 +82,7 @@ public class DynamicFold
 				int cursor = resultsSoFar.size();
 				Node currentNode = currentChain;
 				for (int j=0; j<cursor; j++)
-					currentNode.getNext();
+					currentNode = currentNode.getNext();
 				currentNode = new Node(currentNode.getCharge(), new Coords(0,0,0));
 				
 				ArrayList<Node> baseResults = resultsSoFar.get(resultsSoFar.size()-1);
@@ -129,7 +135,7 @@ public class DynamicFold
 		return false;
 	}
 	
-	private static int energy(Node start)
+	static int energy(Node start)
 	{
 		int energy = 0;
 		// Matrix access order: X, Y, Z
@@ -139,7 +145,7 @@ public class DynamicFold
 		while (next != null)
 		{
 			//if node is H, add to list of charges
-			if (next.getCharge() == 'H')
+			if (next.getCharge() == 'h')
 				chargeLocs.add(next.getCoords());
 			//if more than 1 charge check for neighbors in list of charges
 			if (chargeLocs.size() > 1)
