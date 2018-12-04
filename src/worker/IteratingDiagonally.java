@@ -47,9 +47,9 @@ public class IteratingDiagonally {
                 	ArrayList<Node> target1 = grid.get(i).get(i+j);
                 	ArrayList<Node> target2 = grid.get(i+j+1).get(i+delta);
                 	ArrayList<Node> results = new ArrayList<Node>();
+                	int energyLevel = 0;
                 	for (int k=0; k<target1.size(); k++)
                 	{
-                		int energyLevel = 0;
                 		for( int l=0; l<target2.size(); l++)
                 		{
                 			DynamicFold.generateCombinations(target1.get(k), target2.get(l));
@@ -58,10 +58,10 @@ public class IteratingDiagonally {
                 			if (testEnergy < energyLevel)
                 			{
                 				energyLevel = testEnergy;
-                				results.clear();
+                				results = new ArrayList<Node>();
                 			}
                 			results.addAll(testResults);
-                			DynamicFold.validChains.clear();
+                			DynamicFold.validChains = new ArrayList<Node>();
                 		}
                 	}
                 	grid.get(i).set(i+delta, results);
