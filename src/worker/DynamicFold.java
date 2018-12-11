@@ -6,9 +6,9 @@ public class DynamicFold
 {
 	public static void main(String[] args)
 	{
-		long startTime = System.currentTimeMillis();
+		/*long startTime = System.currentTimeMillis();
 		ArrayList<Node> nodeChains = DynamicFold.splitString("hpph");
-		//for (int i=0; i<nodeChains.size(); i++)
+		for (int i=0; i<nodeChains.size(); i++)
 				//nodeChains.get(i).printChain();
 		System.out.println("");
 		
@@ -20,6 +20,21 @@ public class DynamicFold
 				foldedNodeChains.get(i).get(j).printChain();
 			System.out.println("");
 		}
+		*/
+		
+		Node head = new Node('h', new Coords(0,0,0));
+		Node next = new Node('p', new Coords(1,0,0));
+		head.getLast().setNext(next);
+		next = new Node('p', new Coords(1,1,0));
+		head.getLast().setNext(next);
+		next = new Node('h', new Coords(0,1,0));
+		head.getLast().setNext(next);
+		next = new Node('p', new Coords(0,1,1));
+		//head.getLast().setNext(next);
+		next = new Node('p', new Coords(0,0,1));
+		//head.getLast().setNext(next);
+		
+		System.out.println(energy(head));
 	}
 	
 	static ArrayList<ArrayList<Node>> selfFold(ArrayList<Node> nodeChains)
@@ -135,51 +150,56 @@ public class DynamicFold
 		return false;
 	}
 	
-	static int energy(Node start)
+	static int energy(Node node)
 	{
+		//We want lower scores
+		int hhScore = -6;
+		int hpScore = -1;
+		int ehScore = 1; //Exposed h penalty
 		int energy = 0;
-		// Matrix access order: X, Y, Z
-		ArrayList<Coords> chargeLocs = new ArrayList<Coords>();
 		
-		Node next = start;
-		while (next != null)
+		ArrayList<Node> visited = new ArrayList<Node>();
+		Node foundNode = null;
+		for(Node curNode=node; curNode!=null; curNode=curNode.getNext())
 		{
-			//if node is H, add to list of charges
-			if (next.getCharge() == 'h')
-				chargeLocs.add(next.getCoords());
-			//if more than 1 charge check for neighbors in list of charges
-			if (chargeLocs.size() > 1)
-			{	//(-1,0,0)
-				Coords testCoords = new Coords(
-						next.getCoords().getX()-1,
-						next.getCoords().getY(),
-						next.getCoords().getZ());
-				if (chargeLocs.contains(testCoords))
-					energy--;
-				//(+1,0,0)
-				testCoords.setX(testCoords.getX()+2);
-				if (chargeLocs.contains(testCoords))
-					energy--;
-				//(0,-1,0)
-				testCoords.setX(testCoords.getX()-1);
-				testCoords.setY(testCoords.getY()-1);
-				if (chargeLocs.contains(testCoords))
-					energy--;
-				//(0,+1,0)
-				testCoords.setY(testCoords.getY()+2);
-				if (chargeLocs.contains(testCoords))
-					energy--;
-				//(0,0,-1)
-				testCoords.setY(testCoords.getY()-1);
-				testCoords.setZ(testCoords.getZ()-1);
-				if (chargeLocs.contains(testCoords))
-					energy--;
-				//(0,0,1)
-				testCoords.setZ(testCoords.getZ()+2);
-				if (chargeLocs.contains(testCoords))
-					energy--;
-			}			
-			next = next.getNext();
+			for (int i=-1; i<=1; i+=2) // for -1, 1
+			{
+				for (int j=0; j<3; j++) // for 0, 1, 2
+				{
+					Coords coords = new Coords(curNode.getCoords().getX(), curNode.getCoords().getY(), curNode.getCoords().getZ());
+					switch (j)
+					{
+						case 0:
+							coords.setX(coords.getX() + i);
+							break;
+						case 1:
+							coords.setY(coords.getY() + i);
+							break;
+						case 2:
+							coords.setZ(coords.getZ() + i);
+							break;
+					}
+					int index = visited.indexOf(new Node('D', coords)); //dummy node for searching
+					//System.out.println(coords + " : " + index);
+					if (index == -1)
+						foundNode = null;
+					else
+						foundNode = visited.get(index);
+					char charge = curNode.getCharge();
+					// If node exists at coords and is not the previous or next
+					// node, increase count
+					if (foundNode != null)
+					{
+						if (charge == 'h' && foundNode.getCharge() == 'h')
+							energy = energy + hhScore;
+						else if (charge == 'p' && foundNode.getCharge() == 'h')
+							energy = energy + hpScore;
+					}
+					else if (foundNode == null && charge == 'h')
+						energy = energy + ehScore;
+				}
+			}
+			visited.add(new Node(curNode.getCharge(), curNode.getCoords()));
 		}
 		return energy;
 	}

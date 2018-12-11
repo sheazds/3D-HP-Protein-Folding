@@ -125,10 +125,11 @@ public class Node implements Comparable
 				return true;
 		return false;
 	}
+	
 	@Override
 	public int hashCode()
 	{
-		int hash = this.coords.getX()+this.coords.getY()+this.coords.getZ();
+		int hash = (this.coords.getX()*100)+(this.coords.getY()*10)+this.coords.getZ();
 		if (next != null)
 			hash = hash + next.hashCode();
 		return hash;
