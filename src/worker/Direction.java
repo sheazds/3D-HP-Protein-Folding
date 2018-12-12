@@ -44,17 +44,17 @@ public class Direction {
 	private void calculateDir() {
 		while(node.hasNext()) {
 			if(node.getNext().getCoords().getX() > node.getCoords().getX()) {
-				Dir = Dir + "R";
+				Dir = Dir + "r";
 			}else if(node.getNext().getCoords().getX() < node.getCoords().getX()) {
-				Dir = Dir + "L";
+				Dir = Dir + "l";
 			}else if(node.getNext().getCoords().getY() > node.getCoords().getY()) {
-				Dir = Dir + "U";
+				Dir = Dir + "u";
 			}else if(node.getNext().getCoords().getY() < node.getCoords().getY()) {
-				Dir = Dir + "D";
+				Dir = Dir + "d";
 			}else if(node.getNext().getCoords().getZ() > node.getCoords().getZ()) {
-				Dir = Dir + "O";
+				Dir = Dir + "o";
 			}else {
-				Dir = Dir + "I";
+				Dir = Dir + "i";
 			}
 			node = node.getNext();
 		}

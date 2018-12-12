@@ -7,7 +7,14 @@ public class IteratingDiagonally {
 
     public static void main(String[] args)
     {
-		ArrayList<Node> nodeChains = DynamicFold.splitString("hpphpphp");
+    	String sequence = "hpphppphp";
+		ArrayList<Node> nodeChains = DynamicFold.splitString(sequence);
+		System.out.println("Sequence: "+sequence);
+		System.out.println("SubSequence nodeChains");
+		for (int i=0; i<nodeChains.size(); i++)
+				nodeChains.get(i).printChain();
+		System.out.println("");
+		
 		int size = nodeChains.size();
 	
         //Generate the initial structures for the nth element in the split here.
@@ -47,13 +54,15 @@ public class IteratingDiagonally {
                 	ArrayList<Node> target1 = grid.get(i).get(i+j);
                 	ArrayList<Node> target2 = grid.get(i+j+1).get(i+delta);
                 	ArrayList<Node> results = new ArrayList<Node>();
-                	int lowestEnergy = Integer.MAX_VALUE;
                 	for (int k=0; k<target1.size(); k++)
                 	{
                 		for( int l=0; l<target2.size(); l++)
                 		{
+                        	int lowestEnergy = Integer.MAX_VALUE;
                 			DynamicFold.generateCombinations(target1.get(k), target2.get(l));
                 			ArrayList<Node> testResults = DynamicFold.validChains;
+                			DynamicFold.validChains = new ArrayList<Node>();
+                			DynamicFold.currentMaxEnergyLevel = Integer.MAX_VALUE;
                 			if (testResults.size() > 0)
                 			{
                 				int testEnergy = DynamicFold.energy(testResults.get(0));
@@ -64,7 +73,6 @@ public class IteratingDiagonally {
 	                			}
 	                			results.addAll(testResults);
                 			}
-                			DynamicFold.validChains = new ArrayList<Node>();
                 		}
                 	}
                 	grid.get(i).set(i+delta, results);

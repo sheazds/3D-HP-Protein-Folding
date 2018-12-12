@@ -6,6 +6,7 @@ public class DynamicFold
 {
 	public static void main(String[] args)
 	{
+		/*
 		//testing splitString and selfFold
 		ArrayList<Node> nodeChains = DynamicFold.splitString("hpphpp");
 		System.out.println("SubSequence nodeChains");
@@ -22,25 +23,27 @@ public class DynamicFold
 				foldedNodeChains.get(i).get(j).printChain();
 			System.out.println("");
 		}
+		*/
 		
 		
-		/*
 		//Testing generateCombinations
 		Node head = new Node('h',new Coords(0,0,0));
-		Node next = new Node('p',new Coords(1,0,0));
-		head.setNext(next);
+		head.getLast().setNext(new Node('p',new Coords(1,0,0)));
+		head.getLast().setNext(new Node('p',new Coords(2,0,0)));
 		
-		Node head2 = new Node('h',new Coords(0,0,0));
+		Node tail = new Node('h',new Coords(0,0,0));
+		tail.getLast().setNext(new Node('p',new Coords(1,0,0)));
+		tail.getLast().setNext(new Node('p',new Coords(2,0,0)));
 		
 		
-		generateCombinations(head, head2);
+		System.out.println("head: "+head.getChainString());
+		System.out.println("tail: "+tail.getChainString());
+		generateCombinations(head, tail);
 		
 		System.out.println("Energy: " + currentMaxEnergyLevel);
 		System.out.println("validChains: " + validChains.size());
 		for (int i=0; i<validChains.size(); i++)
 			validChains.get(i).printChain();
-		*/
-
 	}
 	
 	static ArrayList<Node> validChains = new ArrayList<Node>();
