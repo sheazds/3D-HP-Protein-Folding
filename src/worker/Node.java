@@ -112,9 +112,10 @@ public class Node implements Comparable
 	{
 		if (!(another instanceof Node))
 			return false;
-		if(coords.getX() == ((Node) another).getCoords().getX() 
-				&& coords.getY() == ((Node) another).coords.getY()
-				&& coords.getZ() == ((Node) another).coords.getZ())
+		if(	coords.getX() == ((Node) another).getCoords().getX() && 
+			coords.getY() == ((Node) another).coords.getY()		 &&
+			coords.getZ() == ((Node) another).coords.getZ())
+		{
 			if (next != null && (((Node) another).hasNext()))
 				return next.equals(((Node) another).getNext());
 			else if (next != null && (!((Node) another).hasNext()))
@@ -123,6 +124,7 @@ public class Node implements Comparable
 				return false;
 			else
 				return true;
+		}
 		return false;
 	}
 	
@@ -135,14 +137,20 @@ public class Node implements Comparable
 		return hash;
 	}
 	
-	public void printChain()
+	public String getChainString()
 	{
+		String chainString = "";
 		Node next = this;
 		while (next != null)
 		{
-			System.out.print(next+" ");
+			chainString = chainString + next + " ";
 			next = next.getNext();
 		}
-		System.out.println("");
+		return chainString;
+	}
+	
+	public void printChain()
+	{
+		System.out.println(getChainString());
 	}
 }

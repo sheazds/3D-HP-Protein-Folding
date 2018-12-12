@@ -6,22 +6,45 @@ public class DynamicFold
 {
 	public static void main(String[] args)
 	{
-		long startTime = System.currentTimeMillis();
-		ArrayList<Node> nodeChains = DynamicFold.splitString("hpp");
+		//testing splitString and selfFold
+		ArrayList<Node> nodeChains = DynamicFold.splitString("hpphpp");
+		System.out.println("SubSequence nodeChains");
 		for (int i=0; i<nodeChains.size(); i++)
 				nodeChains.get(i).printChain();
 		System.out.println("");
 		
+		System.out.println("nodeChain initial Folds");
 		ArrayList<ArrayList<Node>> foldedNodeChains = selfFold(nodeChains);
-		//System.out.println(System.currentTimeMillis() - startTime);
 		for (int i=0; i<foldedNodeChains.size(); i++)
 		{
+			System.out.println("subSequence " + (i+1));
 			for (int j=0; j<foldedNodeChains.get(i).size(); j++)
 				foldedNodeChains.get(i).get(j).printChain();
 			System.out.println("");
 		}
+		
+		
+		/*
+		//Testing generateCombinations
+		Node head = new Node('h',new Coords(0,0,0));
+		Node next = new Node('p',new Coords(1,0,0));
+		head.setNext(next);
+		
+		Node head2 = new Node('h',new Coords(0,0,0));
+		
+		
+		generateCombinations(head, head2);
+		
+		System.out.println("Energy: " + currentMaxEnergyLevel);
+		System.out.println("validChains: " + validChains.size());
+		for (int i=0; i<validChains.size(); i++)
+			validChains.get(i).printChain();
+		*/
 
 	}
+	
+	static ArrayList<Node> validChains = new ArrayList<Node>();
+    static int currentMaxEnergyLevel = Integer.MAX_VALUE;
 	
 	static ArrayList<ArrayList<Node>> selfFold(ArrayList<Node> nodeChains)
 	{
@@ -49,14 +72,16 @@ public class DynamicFold
 					nextNode = currentNode.getNext();
 					currentNode.setNext(null);
 					currentNode.setCoords(new Coords(0,0,0));
-					for (int j=0; j<chains.size(); j++)
-						generateCombinations(chains.get(j), currentNode);
+					for (int i=0; i<chains.size(); i++)
+						check(chains.get(i), currentNode);
+					for (int i=0; i<validChains.size(); i++)
+						removeRotations( getRotations( validChains.get(i).clone()));
 					chains.clear();
 					chains.addAll(validChains);
 					validChains.clear();
 					currentNode = nextNode;
 				} while (nextNode != null);
-				
+			
 				results.add(chains);
 			}	
 		}
@@ -88,13 +113,14 @@ public class DynamicFold
 				
 				ArrayList<Node> baseResults = resultsSoFar.get(resultsSoFar.size()-1);
 				for (int j=0; j<baseResults.size(); j++)
-					generateCombinations(baseResults.get(j), currentNode);
+					check(baseResults.get(j), currentNode);
+				for (int j=0; j<validChains.size(); j++)
+					removeRotations( getRotations( validChains.get(j).clone()));
 				resultsSoFar.add(validChains);
 				validChains = new ArrayList<Node>();
 			}
 			results.add(resultsSoFar.get(size-1));
 		}
-		
 		return results;
 	}
 	
@@ -239,10 +265,7 @@ public class DynamicFold
 			
 		return nodeChainList;
 	}
-	
-	static ArrayList<Node> validChains = new ArrayList<Node>();
-    static int currentMaxEnergyLevel = Integer.MAX_VALUE;
-	
+		
 	/**
      * Generate the combinations by iterating over the rotations and then shifting the second chain to the end of the
      * first chain. Rotations are calculated by applying two functions: roll and turn. Using them, the first 12
@@ -253,7 +276,7 @@ public class DynamicFold
      * @param behindChain - The chain at the end which is being appended.
      */
     public static void generateCombinations(Node frontChain, Node behindChain) {
-        for(int i=0; i<2; i++) {
+    	for(int i=0; i<2; i++) {
             for(int j=0; j<3; j++) {
                 roll(behindChain);
                 check(frontChain, behindChain);
@@ -266,34 +289,79 @@ public class DynamicFold
             turn(behindChain);
             roll(behindChain);
         }
+    	/*
+    	//roll 
+    	for (int i=0; i<4; i++)
+        {
+        	for (int j=0; j<4; j++)
+        	{
+        		roll(behindChain);
+        		check(frontChain, behindChain);
+        	}
+        	turn(behindChain);
+        }
+    	// for 1st and 3rd twist check all 4 rolls
+    	twist(behindChain);
+    	for (int i=0; i<3; i++)
+        {
+        	turn(behindChain);
+    		if (i == 0 || i == 2)
+    		{
+	        	for (int j=0; j<4; j++)
+	        	{
+	        		roll(behindChain);
+	        		check(frontChain, behindChain);
+	        	}
+    		}
+        }
+        */
         
         //Remove validChains that are rotations of existing chains
-        ArrayList<Node> rotations = new ArrayList<Node>();
         for (int v=0; v<validChains.size(); v++)
+        	removeRotations( getRotations( validChains.get(v).clone()));
+    }
+    
+    public static ArrayList<Node> getRotations(Node rotationChain)
+    {
+    	ArrayList<Node> rotations = new ArrayList<Node>();
+    	//for all 4 turns, check all 4 rolls
+    	for (int i=0; i<4; i++)
         {
-	        Node rotationChain = validChains.get(v).clone();
-	        for(int i=0; i<2; i++) {
-	            for(int j=0; j<3; j++) {
-	                roll(rotationChain);
-	                rotations.add(rotationChain);
-	                for(int k=0; k<3; k++) {
-	                    turn(rotationChain);
-	                    rotations.add(rotationChain);
-	                }
-	            }
-	        }
-	        for (int i=1; i<validChains.size(); i++)
-	        {
-	        	if (rotations.contains(validChains.get(i)))
-	        	{
-	        		validChains.remove(i);
-	        		i--;
-	        	}
-	        }
+        	for (int j=0; j<4; j++)
+        	{
+        		roll(rotationChain);
+        		if(!rotations.contains(rotationChain) && !(i==0 && j==3))
+        			rotations.add(rotationChain.clone());
+        	}
+        	turn(rotationChain);
         }
-        
+    	// for 1st and 3rd twist check all 4 rolls
+    	twist(rotationChain);
+    	for (int i=0; i<3; i++)
+        {
+        	turn(rotationChain);
+    		if (i == 0 || i == 2)
+    		{
+	        	for (int j=0; j<4; j++)
+	        	{
+	        		roll(rotationChain);
+	        		if(!rotations.contains(rotationChain))
+	        			rotations.add(rotationChain.clone());
+	        	}
+    		}
+        }
+    	
+    	return rotations;
     }
 
+    public static void removeRotations(ArrayList<Node> rotations)
+    {   
+        for (int i=1; i<validChains.size();)
+        	if (rotations.contains(validChains.get(i)))
+        		validChains.remove(i);
+        	else i++;
+    }
+    
     /**
      * Given two chains, try to attach the second chain to the 6 side of the last node in the first chain. A combination
      * is only valid if the nodes do not overlap together.
@@ -345,7 +413,7 @@ public class DynamicFold
 
 
     /**
-     * Function that rolls the chain where roll rotates the chain 90 degrees away from you. This means the bottom is now
+     * Function that rolls the chain where roll rotates the chain 90 degrees away from you about the x axis. This means the bottom is now
      * the side facing you.
      * @param frontChain - Head node of the chain.
      */
@@ -384,6 +452,29 @@ public class DynamicFold
             nextNode.getCoords().setX(-tempY);
             nextNode.getCoords().setY(tempX);
             nextNode.getCoords().setZ(tempZ);
+
+            nextNode = nextNode.getNext();
+        } while (nextNode != null);
+
+    }
+    
+    /**
+     * Function that twists the chain where twist rotates the chain 90 degrees about the y axis. So the front side becomes
+     * the left side of the new chain.
+     * @param frontChain - Head node of the chain.
+     */
+    public static void twist(Node frontChain) {
+
+        Node nextNode = frontChain;
+
+        do {
+            int tempX = nextNode.getCoords().getX();
+            int tempY = nextNode.getCoords().getY();
+            int tempZ = nextNode.getCoords().getZ();
+
+            nextNode.getCoords().setX(tempZ);
+            nextNode.getCoords().setY(tempY);
+            nextNode.getCoords().setZ(-tempX);
 
             nextNode = nextNode.getNext();
         } while (nextNode != null);

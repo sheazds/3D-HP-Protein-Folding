@@ -42,9 +42,10 @@ public class Coords implements Comparable{
 	public boolean equals(Object another)	{
 		if (!(another instanceof Coords))
 			return false;
-		if(this.x == ((Coords) another).x 
-				&& this.y == ((Coords) another).y
-				&& this.z == ((Coords) another).z){
+		if(	this.x == ((Coords) another).x &&
+			this.y == ((Coords) another).y &&
+			this.z == ((Coords) another).z)
+		{
 			return true;
 		}
 		return false;
@@ -52,7 +53,7 @@ public class Coords implements Comparable{
 	@Override
 	public int hashCode()
 	{
-		return x+y+z;
+		return (x*100)+(y*10)+z;
 	}
 	
 	/**
