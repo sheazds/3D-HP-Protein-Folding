@@ -4,23 +4,32 @@ import java.util.ArrayList;
 import worker.DynamicFold;
 
 public class IteratingDiagonally {
-
-    public static void main(String[] args)
-    {
+	public static void main(String[] args)
+	{
     	String sequence = "hpphppphp";
+    	iterateDiagonally(sequence, -6, -1, 2);
+	}
+
+	public static ArrayList<String> iterateDiagonally(String sequence, int hhScore, int hpScore, int ehScore)
+    {
+		DynamicFold.hhScore = hhScore;
+		DynamicFold.hpScore = hpScore;
+		DynamicFold.ehScore = ehScore;
 		ArrayList<Node> nodeChains = DynamicFold.splitString(sequence);
+		/*
 		System.out.println("Sequence: "+sequence);
 		System.out.println("SubSequence nodeChains");
 		for (int i=0; i<nodeChains.size(); i++)
 				nodeChains.get(i).printChain();
 		System.out.println("");
+		*/
 		
-		int size = nodeChains.size();
-	
         //Generate the initial structures for the nth element in the split here.
+		int size = nodeChains.size();
         ArrayList<ArrayList<ArrayList<Node>>> grid = new ArrayList<ArrayList<ArrayList<Node>>>(size);
 		ArrayList<ArrayList<Node>> foldedNodeChains = DynamicFold.selfFold(nodeChains);
 		
+		/*
 		System.out.println("Node Chains");
 		for (int i=0; i<foldedNodeChains.size(); i++)
 		{
@@ -28,7 +37,8 @@ public class IteratingDiagonally {
 			for (int j=0; j<foldedNodeChains.get(i).size(); j++)
 				foldedNodeChains.get(i).get(j).printChain();
 		}
-			
+        System.out.println("");
+		*/
 		
         for (int i=0; i<size; i++)
         {
@@ -38,7 +48,6 @@ public class IteratingDiagonally {
         	row.set(i, foldedNodeChains.get(i));
         	grid.add(row);
         }
-        System.out.println("");
         
         int diagonalSize = size - 1;
         for(int delta = 1; delta <= size-1; delta++)
@@ -77,20 +86,26 @@ public class IteratingDiagonally {
                 	}
                 	grid.get(i).set(i+delta, results);
                 }
-
             }
             diagonalSize--;
         }
-        
         //Cell grid[0][size-1] should now contain the optimal structure.
         ArrayList<Node> results = grid.get(0).get(grid.size()-1);
+        
+        //convert results to strings of directional changes
+        ArrayList<String> resultDirections = new ArrayList<String>();
+        for (int i=0; i<results.size(); i++)
+        	resultDirections.add(Direction.calculateDir(results.get(i)));
+        
+        
         System.out.println("Results = " + results.size());
         for (int i=0; i<results.size(); i++)
         {
-        	System.out.print("Energy: " + DynamicFold.energy(results.get(i)) + " | ");
-	        results.get(i).printChain();
+        	System.out.print("Energy: " + DynamicFold.energy(results.get(i)) + " | " + results.get(i).getChainString());
+        	System.out.println("\nDirections: " + resultDirections.get(i));
         }
-
+        
+        return resultDirections;
     }
 
 }

@@ -48,6 +48,9 @@ public class DynamicFold
 	
 	static ArrayList<Node> validChains = new ArrayList<Node>();
     static int currentMaxEnergyLevel = Integer.MAX_VALUE;
+	static int hhScore = -6;
+	static int hpScore = -1;
+	static int ehScore = 2; //Exposed h penalty
 	
 	static ArrayList<ArrayList<Node>> selfFold(ArrayList<Node> nodeChains)
 	{
@@ -169,9 +172,6 @@ public class DynamicFold
 	static int energy(Node node)
 	{
 		//We want lower scores
-		int hhScore = -6;
-		int hpScore = -1;
-		int ehScore = 1; //Exposed h penalty
 		int energy = 0;
 		
 		ArrayList<Node> visited = new ArrayList<Node>();
@@ -280,6 +280,7 @@ public class DynamicFold
      * @param behindChain - The chain at the end which is being appended.
      */
     public static void generateCombinations(Node frontChain, Node behindChain) {
+    	
     	for(int i=0; i<2; i++) {
             for(int j=0; j<3; j++) {
                 roll(behindChain);
@@ -293,8 +294,9 @@ public class DynamicFold
             turn(behindChain);
             roll(behindChain);
         }
+        
     	/*
-    	//roll 
+    	//for all 4 turns check all 4 rolls
     	for (int i=0; i<4; i++)
         {
         	for (int j=0; j<4; j++)
@@ -319,6 +321,7 @@ public class DynamicFold
     		}
         }
         */
+        
         
         //Remove validChains that are rotations of existing chains
         for (int v=0; v<validChains.size(); v++)
