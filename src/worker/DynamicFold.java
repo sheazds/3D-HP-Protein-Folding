@@ -6,35 +6,21 @@ public class DynamicFold
 {
 	public static void main(String[] args)
 	{
-		/*long startTime = System.currentTimeMillis();
-		ArrayList<Node> nodeChains = DynamicFold.splitString("hpph");
+		long startTime = System.currentTimeMillis();
+		ArrayList<Node> nodeChains = DynamicFold.splitString("hpp");
 		for (int i=0; i<nodeChains.size(); i++)
-				//nodeChains.get(i).printChain();
+				nodeChains.get(i).printChain();
 		System.out.println("");
 		
 		ArrayList<ArrayList<Node>> foldedNodeChains = selfFold(nodeChains);
-		System.out.println(System.currentTimeMillis() - startTime);
+		//System.out.println(System.currentTimeMillis() - startTime);
 		for (int i=0; i<foldedNodeChains.size(); i++)
 		{
 			for (int j=0; j<foldedNodeChains.get(i).size(); j++)
 				foldedNodeChains.get(i).get(j).printChain();
 			System.out.println("");
 		}
-		*/
-		
-		Node head = new Node('h', new Coords(0,0,0));
-		Node next = new Node('p', new Coords(1,0,0));
-		head.getLast().setNext(next);
-		next = new Node('p', new Coords(1,1,0));
-		head.getLast().setNext(next);
-		next = new Node('h', new Coords(0,1,0));
-		head.getLast().setNext(next);
-		next = new Node('p', new Coords(0,1,1));
-		//head.getLast().setNext(next);
-		next = new Node('p', new Coords(0,0,1));
-		//head.getLast().setNext(next);
-		
-		System.out.println(energy(head));
+
 	}
 	
 	static ArrayList<ArrayList<Node>> selfFold(ArrayList<Node> nodeChains)
@@ -280,6 +266,32 @@ public class DynamicFold
             turn(behindChain);
             roll(behindChain);
         }
+        
+        //Remove validChains that are rotations of existing chains
+        ArrayList<Node> rotations = new ArrayList<Node>();
+        for (int v=0; v<validChains.size(); v++)
+        {
+	        Node rotationChain = validChains.get(v).clone();
+	        for(int i=0; i<2; i++) {
+	            for(int j=0; j<3; j++) {
+	                roll(rotationChain);
+	                rotations.add(rotationChain);
+	                for(int k=0; k<3; k++) {
+	                    turn(rotationChain);
+	                    rotations.add(rotationChain);
+	                }
+	            }
+	        }
+	        for (int i=1; i<validChains.size(); i++)
+	        {
+	        	if (rotations.contains(validChains.get(i)))
+	        	{
+	        		validChains.remove(i);
+	        		i--;
+	        	}
+	        }
+        }
+        
     }
 
     /**
