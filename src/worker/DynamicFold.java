@@ -81,7 +81,8 @@ public class DynamicFold
 						removeRotations( getRotations( validChains.get(i).clone()));
 					chains.clear();
 					chains.addAll(validChains);
-					validChains.clear();
+					validChains = new ArrayList<Node>();
+					currentMaxEnergyLevel = Integer.MAX_VALUE;
 					currentNode = nextNode;
 				} while (nextNode != null);
 			
