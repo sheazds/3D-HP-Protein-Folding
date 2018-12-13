@@ -728,7 +728,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Alanine_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Alanine_Button.setForeground(new java.awt.Color(0, 0, 255));
         Alanine_Button.setText("Alanine");
         Alanine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -736,7 +736,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Arginine_Button.setForeground(new java.awt.Color(0, 0, 255));
+        Arginine_Button.setForeground(new java.awt.Color(255, 0, 0));
         Arginine_Button.setText("Arginine");
         Arginine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -744,7 +744,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Asparagine_Button.setForeground(new java.awt.Color(0, 0, 255));
+        Asparagine_Button.setForeground(new java.awt.Color(255, 0, 0));
         Asparagine_Button.setText("Asparagine");
         Asparagine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -752,7 +752,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        AsparticAcid_Button.setForeground(new java.awt.Color(0, 0, 255));
+        AsparticAcid_Button.setForeground(new java.awt.Color(255, 0, 0));
         AsparticAcid_Button.setText("Aspartic Acid");
         AsparticAcid_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -760,7 +760,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        GlutamicAcid_Button.setForeground(new java.awt.Color(0, 0, 255));
+        GlutamicAcid_Button.setForeground(new java.awt.Color(255, 0, 0));
         GlutamicAcid_Button.setText("Glutamic Acid");
         GlutamicAcid_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -768,7 +768,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Glutamine_Button.setForeground(new java.awt.Color(0, 0, 255));
+        Glutamine_Button.setForeground(new java.awt.Color(255, 0, 0));
         Glutamine_Button.setText("Glutamine");
         Glutamine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -776,7 +776,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Glycine_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Glycine_Button.setForeground(new java.awt.Color(0, 0, 255));
         Glycine_Button.setText("Glycine");
         Glycine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -784,7 +784,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Histidine_Button.setForeground(new java.awt.Color(0, 0, 255));
+        Histidine_Button.setForeground(new java.awt.Color(255, 0, 0));
         Histidine_Button.setText("Histidine");
         Histidine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -792,7 +792,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Isoleucine_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Isoleucine_Button.setForeground(new java.awt.Color(0, 0, 255));
         Isoleucine_Button.setText("Isoleucine");
         Isoleucine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -800,7 +800,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Lysine_Button.setForeground(new java.awt.Color(0, 0, 255));
+        Lysine_Button.setForeground(new java.awt.Color(255, 0, 0));
         Lysine_Button.setText("Lysine");
         Lysine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -808,7 +808,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Proline_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Proline_Button.setForeground(new java.awt.Color(0, 0, 255));
         Proline_Button.setText("Proline");
         Proline_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -816,7 +816,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Serine_Button.setForeground(new java.awt.Color(0, 0, 255));
+        Serine_Button.setForeground(new java.awt.Color(255, 0, 0));
         Serine_Button.setText("Serine");
         Serine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -824,7 +824,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Threonine_Button.setForeground(new java.awt.Color(0, 0, 255));
+        Threonine_Button.setForeground(new java.awt.Color(255, 0, 0));
         Threonine_Button.setText("Threonine");
         Threonine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -832,7 +832,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Valine_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Valine_Button.setForeground(new java.awt.Color(0, 0, 255));
         Valine_Button.setText("Valine");
         Valine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -840,7 +840,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Cysteine_Button.setForeground(new java.awt.Color(0, 0, 255));
+        Cysteine_Button.setForeground(new java.awt.Color(255, 0, 0));
         Cysteine_Button.setText("Cysteine");
         Cysteine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -848,7 +848,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Leucine_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Leucine_Button.setForeground(new java.awt.Color(0, 0, 255));
         Leucine_Button.setText("Leucine");
         Leucine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -856,7 +856,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Methionine_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Methionine_Button.setForeground(new java.awt.Color(0, 0, 255));
         Methionine_Button.setText("Methionine");
         Methionine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -864,7 +864,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Phenylalanine_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Phenylalanine_Button.setForeground(new java.awt.Color(0, 0, 255));
         Phenylalanine_Button.setText("Phenylalanine");
         Phenylalanine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -872,7 +872,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Tryptophan_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Tryptophan_Button.setForeground(new java.awt.Color(0, 0, 255));
         Tryptophan_Button.setText("Tryptophan");
         Tryptophan_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -880,7 +880,7 @@ public class Gui extends javax.swing.JFrame {
             }
         });
 
-        Tyrosine_Button.setForeground(new java.awt.Color(255, 0, 0));
+        Tyrosine_Button.setForeground(new java.awt.Color(0, 0, 255));
         Tyrosine_Button.setText("Tyrosine");
         Tyrosine_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

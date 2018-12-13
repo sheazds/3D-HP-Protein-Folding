@@ -98,13 +98,14 @@ public class IteratingDiagonally {
         for (int i=0; i<results.size(); i++)
         	resultDirections.add(Direction.calculateDir(results.get(i)));
         
-        
+        /*
         System.out.println("Results = " + results.size());
         for (int i=0; i<results.size(); i++)
         {
         	System.out.print("Energy: " + DynamicFold.energy(results.get(i)) + " | " + results.get(i).getChainString());
         	System.out.println("\nDirections: " + resultDirections.get(i));
         }
+        */
         
         return resultDirections;
     }
