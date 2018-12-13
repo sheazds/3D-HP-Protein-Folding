@@ -227,12 +227,12 @@ private void buildModel(cords protein, String charges){
         Appearance app = new Appearance();
         Material mat = new Material();
         if(charges.charAt(a)=='h'){
-            mat.setDiffuseColor(new Color3f(1, 0, 0));
-            mat.setEmissiveColor(0.6f, 0.0f, 0.0f);
-        }
-        else{
             mat.setDiffuseColor(new Color3f(0, 0, 1));
             mat.setEmissiveColor(0.0f, 0.0f, 0.6f);
+        }
+        else{
+            mat.setDiffuseColor(new Color3f(1, 0, 0));
+            mat.setEmissiveColor(0.6f, 0.0f, 0.0f);
         }
         app.setMaterial(mat);
 

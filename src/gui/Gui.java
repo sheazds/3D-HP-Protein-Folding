@@ -13,6 +13,8 @@ import javax.swing.JFileChooser;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
+import worker.IteratingDiagonally;
+
 public class Gui extends javax.swing.JFrame {
 	
     private ArrayList<String> structures = new ArrayList<String>();
@@ -395,15 +397,24 @@ public class Gui extends javax.swing.JFrame {
             		System.out.println(hpSpinner.getValue());
             		System.out.println(hExposedSpinner.getValue());
             	
-            		chainCharges = customHPSeq;
+            		//chainCharges = customHPSeq;
             		*/
             		
+            		/*
             		chainCharges = "hphphp";
             		structures = new ArrayList<String>();
             		structures.add("llllu");
             		structures.add("llluu");
             		structures.add("lluuu");
             		structures.add("luuuu");
+            		*/
+            		            		
+            		chainCharges = customHPSeq;
+            		structures = IteratingDiagonally.iterateDiagonally(
+            						chainCharges,
+		            				(int) hhSpinner.getValue(),
+		            				(int) hpSpinner.getValue(), 
+		            				(int) hExposedSpinner.getValue());
             		
             		//If there are fewer then 3 structures, pad the structures array list with the first one.
             		if(structures.size() == 1) {

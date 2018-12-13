@@ -7,7 +7,7 @@ public class IteratingDiagonally {
 	public static void main(String[] args)
 	{
     	String sequence = "hpphppphp";
-    	iterateDiagonally(sequence, -6, -1, 2);
+    	iterateDiagonally(sequence, -1, 0, 0);
 	}
 
 	public static ArrayList<String> iterateDiagonally(String sequence, int hhScore, int hpScore, int ehScore)
@@ -56,10 +56,12 @@ public class IteratingDiagonally {
             {            
                 //Generate Structures from cells grid[i][i+j] and grid[i+j+1][i+delta].
                 //Structures with the lowest energy levels should be added to grid[i][i+delta]
+            	
                 for(int j=0; j<delta; j++)
                 {
                     //System.out.println("Cell target info");
                 	//System.out.println("i:"+i+", j:"+j+", delta:"+delta+"\t target1:["+i+"]["+(i+j)+"] target2:["+(i+j+1)+"]["+(i+delta)+"]");
+                	DynamicFold.currentMaxEnergyLevel = Integer.MAX_VALUE;
                 	ArrayList<Node> target1 = grid.get(i).get(i+j);
                 	ArrayList<Node> target2 = grid.get(i+j+1).get(i+delta);
                 	ArrayList<Node> results = new ArrayList<Node>();
@@ -71,7 +73,6 @@ public class IteratingDiagonally {
                 			DynamicFold.generateCombinations(target1.get(k), target2.get(l));
                 			ArrayList<Node> testResults = DynamicFold.validChains;
                 			DynamicFold.validChains = new ArrayList<Node>();
-                			DynamicFold.currentMaxEnergyLevel = Integer.MAX_VALUE;
                 			if (testResults.size() > 0)
                 			{
                 				int testEnergy = DynamicFold.energy(testResults.get(0));
