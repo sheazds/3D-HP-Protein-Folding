@@ -1,5 +1,8 @@
 package gui;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -11,8 +14,15 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 
 public class Gui extends javax.swing.JFrame {
+	
+    private ArrayList<String> structures = new ArrayList<String>();
+    private int view1StructurePosition;
+    private int view2StructurePosition;
+    private int view3StructurePosition;
+    private String chainCharges;
+    private boolean nextBackEnabledOnGenetic = false;
     
-    /** Creates new form Gui */
+    
     public Gui() {
         info = new Info(this);
         initComponents();
@@ -117,6 +127,29 @@ public class Gui extends javax.swing.JFrame {
         int ipops_defVal = 1;
         SpinnerModel ipops = new SpinnerNumberModel(ipops_defVal,imin_pops,imax_pops,ipops_step);
         num_pops = new javax.swing.JSpinner(ipops);
+
+        hhSpinner = new javax.swing.JSpinner(new SpinnerNumberModel(-1, -5, 5, 1));
+        hpSpinner = new javax.swing.JSpinner(new SpinnerNumberModel(0, -5, 5, 1));
+        hExposedSpinner = new javax.swing.JSpinner(new SpinnerNumberModel(0, -5, 5, 1));
+        
+        hhLabel = new javax.swing.JLabel("H-H Score");
+        hpLabel = new javax.swing.JLabel("H-P Score");
+        hExposedLabel = new javax.swing.JLabel("H Exposed Score");
+        
+        hhSpinner.setVisible(false);
+        hpSpinner.setVisible(false);
+        hExposedSpinner.setVisible(false);
+        
+        hhLabel.setVisible(false);
+        hpLabel.setVisible(false);
+        hExposedLabel.setVisible(false);
+        
+        generateDynamicButton = new javax.swing.JButton("Generate");
+        generateDynamicButton.setVisible(false);
+        
+        placeHolder = new javax.swing.JPanel();
+        placeHolder.setVisible(false);
+        
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jSeparator4 = new javax.swing.JSeparator();
@@ -156,7 +189,260 @@ public class Gui extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Open = new javax.swing.JMenuItem();
-
+        
+        geneticButton = new javax.swing.JRadioButton("Genetic");
+        geneticButton.setSelected(true);
+        dynamicButton = new javax.swing.JRadioButton("Dynamic");
+        methodOptionGroup = new javax.swing.ButtonGroup();
+        methodOptionGroup.add(geneticButton);
+        methodOptionGroup.add(dynamicButton);
+        
+        
+        geneticButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2.setVisible(true);
+                jTextField3.setVisible(true);
+                jTextField4.setVisible(true);
+                jTextField5.setVisible(true);
+                jTextField6.setVisible(true);
+                jTextField7.setVisible(true);
+                jTextField8.setVisible(true);
+                jTextField9.setVisible(true);
+                jTextField10.setVisible(true);
+                jTextField12.setVisible(true);
+                jTextField13.setVisible(true);
+                jTextField14.setVisible(true);
+                jTextField15.setVisible(true);
+                swap_ss.setVisible(true);
+                add_ss.setVisible(true);
+                Mut_prob.setVisible(true);
+                min_ss_len.setVisible(true);
+                max_ss_len.setVisible(true);
+                max_ss_qt.setVisible(true);
+                jScrollPane2.setVisible(true);
+                user_ss_only.setVisible(true);
+                ga_cycles.setVisible(true);
+                pop_size.setVisible(true);
+                num_pops.setVisible(true);
+                
+                hhSpinner.setVisible(false);
+                hpSpinner.setVisible(false);
+                hExposedSpinner.setVisible(false);
+                
+                hhLabel.setVisible(false);
+                hpLabel.setVisible(false);
+                hExposedLabel.setVisible(false);
+                
+                generateDynamicButton.setVisible(false);
+                jButton1.setVisible(true);
+                jButton9.setVisible(true);
+                placeHolder.setVisible(false);
+                
+                ActionListener[] listeners = jButton6.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton6.removeActionListener(l);
+                }
+                jButton6.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		jButton6ActionPerformed(evt);
+                    }});
+                
+                
+                listeners = jButton5.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton5.removeActionListener(l);
+                }
+                jButton5.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		jButton5ActionPerformed(evt);
+                    }});
+                
+                
+                listeners = jButton7.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton7.removeActionListener(l);
+                }
+                jButton7.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		jButton7ActionPerformed(evt);
+                    }});
+                
+                
+                listeners = jButton3.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton3.removeActionListener(l);
+                }
+                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		jButton3ActionPerformed(evt);
+                    }});
+                
+                
+                listeners = jButton2.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton2.removeActionListener(l);
+                }
+                jButton2.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		jButton2ActionPerformed(evt);
+                    }});
+                
+                jButton3.setEnabled(nextBackEnabledOnGenetic);
+                jButton2.setEnabled(nextBackEnabledOnGenetic);
+                
+            }
+        });
+        
+        dynamicButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2.setVisible(false);
+                jTextField3.setVisible(false);
+                jTextField4.setVisible(false);
+                jTextField5.setVisible(false);
+                jTextField6.setVisible(false);
+                jTextField7.setVisible(false);
+                jTextField8.setVisible(false);
+                jTextField9.setVisible(false);
+                jTextField10.setVisible(false);
+                jTextField12.setVisible(false);
+                jTextField13.setVisible(false);
+                jTextField14.setVisible(false);
+                jTextField15.setVisible(false);
+                swap_ss.setVisible(false);
+                add_ss.setVisible(false);
+                Mut_prob.setVisible(false);
+                min_ss_len.setVisible(false);
+                max_ss_len.setVisible(false);
+                max_ss_qt.setVisible(false);
+                jScrollPane2.setVisible(false);
+                user_ss_only.setVisible(false);
+                ga_cycles.setVisible(false);
+                pop_size.setVisible(false);
+                num_pops.setVisible(false);
+                
+                hhSpinner.setVisible(true);
+                hpSpinner.setVisible(true);
+                hExposedSpinner.setVisible(true);
+                
+                hhLabel.setVisible(true);
+                hpLabel.setVisible(true);
+                hExposedLabel.setVisible(true);
+                
+                generateDynamicButton.setVisible(true);
+                jButton1.setVisible(false);
+                jButton9.setVisible(false);
+                placeHolder.setVisible(true);
+                
+                ActionListener[] listeners = jButton6.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton6.removeActionListener(l);
+                }
+                jButton6.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		view1Listener(evt);
+                    }});
+                
+                
+                listeners = jButton5.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton5.removeActionListener(l);
+                }
+                jButton5.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		view2Listener(evt);
+                    }});
+                
+                
+                listeners = jButton7.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton7.removeActionListener(l);
+                }
+                jButton7.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		view3Listener(evt);
+                    }});
+                
+                listeners = jButton3.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton3.removeActionListener(l);
+                }
+                jButton3.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		nextStructure(evt);
+                    }});
+                
+                listeners = jButton2.getActionListeners();
+                for (ActionListener l : listeners) {
+                    jButton2.removeActionListener(l);
+                }
+                jButton2.addActionListener(new java.awt.event.ActionListener() {
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    		previousStructure(evt);
+                    }});
+                
+                nextBackEnabledOnGenetic = jButton3.isEnabled();
+                jButton3.setEnabled(true);
+                jButton2.setEnabled(true);
+            }
+        });
+        
+        generateDynamicButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            		
+            		/*
+            		System.out.println(customHPSeq);
+            		System.out.println(hhSpinner.getValue());
+            		System.out.println(hpSpinner.getValue());
+            		System.out.println(hExposedSpinner.getValue());
+            	
+            		chainCharges = customHPSeq;
+            		*/
+            		
+            		chainCharges = "hphphp";
+            		structures = new ArrayList<String>();
+            		structures.add("llllu");
+            		structures.add("llluu");
+            		structures.add("lluuu");
+            		structures.add("luuuu");
+            		
+            		//If there are fewer then 3 structures, pad the structures array list with the first one.
+            		if(structures.size() == 1) {
+            			structures.add(structures.get(0));
+            			structures.add(structures.get(0));
+            		}
+            		if(structures.size() == 2) {
+            			structures.add(structures.get(0));
+            		}
+            		
+            		
+            		view1StructurePosition = 0;
+            		view2StructurePosition = 1;
+            		view3StructurePosition = 2;
+            		
+            		//Main panel.
+            		jPanel1.removeAll();
+            		jPanel2.removeAll();
+            		jPanel3.removeAll();
+            		jPanel4.removeAll();
+            		
+            		view1 = new HP_Model_Viewer();
+            		view1.build(jPanel1, structures.get(1), chainCharges);
+                    
+            		//Three side panels.
+            		view2 = new HP_Model_Viewer();
+            		view2.build(jPanel2, structures.get(0), chainCharges);
+            		
+            		view3 = new HP_Model_Viewer();
+            		view3.build(jPanel3, structures.get(1), chainCharges);
+            		
+            		view4 = new HP_Model_Viewer();
+            		view4.build(jPanel4, structures.get(2), chainCharges);
+            		pack();
+            		
+            }
+        });
+        
+        
         FileChooser.setFileFilter(new MyCustomFilter());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -185,6 +471,10 @@ public class Gui extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
         view1 = new HP_Model_Viewer();
         view1.build(jPanel1, info.getBigView(),"hphphphhhhhhhhhhhhhhphphphpphphhhhhpphphphpphphphphphpphphphpphph");
+        
+        //view1.build(jPanel1, "llll","hphph");
+        //view1.morph("lulu");
+        
 
         jPanel2.setBackground(java.awt.Color.white);
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -755,19 +1045,27 @@ public class Gui extends javax.swing.JFrame {
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(user_charges, javax.swing.GroupLayout.PREFERRED_SIZE, 735, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(geneticButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(dynamicButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, 0, 0, Short.MAX_VALUE)
                                 .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(generateDynamicButton, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            
+                            
                             .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -801,7 +1099,20 @@ public class Gui extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(min_ss_len, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(min_ss_len, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                            .addComponent(hhLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(hhSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                            .addComponent(hpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(hpSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                            .addComponent(hExposedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(hExposedSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(placeHolder,200,200,200)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -825,13 +1136,20 @@ public class Gui extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
-                            .addComponent(jButton9))
+                            .addComponent(jButton9)
+                            .addComponent(generateDynamicButton))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(geneticButton)
+                                .addComponent(dynamicButton))
                         .addGap(6, 6, 6)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton8)
                             .addComponent(jButton4))
+                        
+                    /* ---------- Start of Side Panel ---------- */
+                        
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -856,6 +1174,16 @@ public class Gui extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(min_ss_len, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(hhLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(hhSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(hpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(hpSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(hExposedLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(hExposedSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(placeHolder, 403, 403, 403)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(max_ss_len, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -887,6 +1215,9 @@ public class Gui extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(num_pops, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    
+                    /* ---------- End of Side Panel ---------- */
+                    
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(user_charges, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(6, 6, 6)
@@ -914,7 +1245,7 @@ public class Gui extends javax.swing.JFrame {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
+        
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -972,6 +1303,86 @@ public class Gui extends javax.swing.JFrame {
         rebuilt =false;
         prot_info_box.setText(info.getInfo(2));
     }//GEN-LAST:event_jButton5ActionPerformed
+    
+    private void view1Listener(ActionEvent evt) {
+        if(rebuilt == true){
+            jPanel1.removeAll();
+            view1 = new HP_Model_Viewer();
+            view1.build(jPanel1, structures.get(view1StructurePosition), chainCharges); 
+        }
+        else{
+            view1.morph(structures.get(view1StructurePosition));
+        }
+        pack();
+        rebuilt =false;
+
+    }
+    
+    private void view2Listener(ActionEvent evt) {
+        if(rebuilt == true){
+            jPanel1.removeAll();
+            view1 = new HP_Model_Viewer();
+            view1.build(jPanel1, structures.get(view2StructurePosition), chainCharges); 
+        }
+        else{
+            view1.morph(structures.get(view2StructurePosition));
+        }
+        pack();
+        rebuilt =false;
+    }
+    
+    private void view3Listener(ActionEvent evt) {
+        if(rebuilt == true){
+            jPanel1.removeAll();
+            view1 = new HP_Model_Viewer();
+            view1.build(jPanel1, structures.get(view3StructurePosition), chainCharges); 
+        }
+        else{
+            view1.morph(structures.get(view3StructurePosition));
+        }
+        pack();
+        rebuilt =false;
+    }
+    
+    private void nextStructure(ActionEvent evt) {
+    		view1StructurePosition++;
+    		view2StructurePosition++;
+    		view3StructurePosition++;
+    	
+		if(view1StructurePosition >= structures.size()) {
+			view1StructurePosition = 0;
+		}
+		if(view2StructurePosition >= structures.size()) {
+			view2StructurePosition = 0;
+		}
+    		if(view3StructurePosition >= structures.size()) {
+    			view3StructurePosition = 0;
+    		}
+    		
+    		view2.morph(structures.get(view1StructurePosition));
+    		view3.morph(structures.get(view2StructurePosition));
+    		view4.morph(structures.get(view3StructurePosition));
+    }
+    
+    private void previousStructure(ActionEvent evt) {
+		view1StructurePosition--;
+		view2StructurePosition--;
+		view3StructurePosition--;
+	
+		if(view1StructurePosition <= -1) {
+			view1StructurePosition = structures.size() - 1;
+		}
+		if(view2StructurePosition <= -1) {
+			view2StructurePosition = structures.size() - 1;
+		}
+		if(view3StructurePosition <= -1) {
+			view3StructurePosition = structures.size() - 1;
+		}
+		
+		view2.morph(structures.get(view1StructurePosition));
+		view3.morph(structures.get(view2StructurePosition));
+		view4.morph(structures.get(view3StructurePosition));
+    }
 
     
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -1847,5 +2258,22 @@ public class Gui extends javax.swing.JFrame {
     private javax.swing.JTable user_ss_define;
     private javax.swing.JCheckBox user_ss_only;
     // End of variables declaration//GEN-END:variables
+    
+    private javax.swing.JRadioButton geneticButton;
+    private javax.swing.JRadioButton dynamicButton;
+    private javax.swing.ButtonGroup methodOptionGroup;
+    
+    private javax.swing.JLabel hhLabel;
+    private javax.swing.JSpinner hhSpinner;
+    
+    private javax.swing.JLabel hpLabel;
+    private javax.swing.JSpinner hpSpinner;
+    
+    private javax.swing.JLabel hExposedLabel;
+    private javax.swing.JSpinner hExposedSpinner;
+    
+    private javax.swing.JButton generateDynamicButton;
+    
+    private javax.swing.JPanel placeHolder;
     
 }
