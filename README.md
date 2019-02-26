@@ -1,3 +1,6 @@
+Extension of 3D-HP-Protein-Folding that incorporates an option to use a Dynamic Programming algorithm to perform folding.
+Project extension by Davis Goulet, JiangTao D Qiu, Ray Song, and Shea Zsombor.
+
 3D-HP-Protein-Folding
 =====================
 A Concurrent 3D Protein Folding Application
